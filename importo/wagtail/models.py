@@ -56,7 +56,11 @@ class LegacyPageMixin(LegacyImportedModelMixin):
     def has_ideal_parent(self, request: HttpRequest = None) -> bool:
         if not self.legacy_path:
             return True
-        site_id, root_url, current_parent_path = self.specific_parent_page.get_url_parts(request)
+        (
+            site_id,
+            root_url,
+            current_parent_path,
+        ) = self.specific_parent_page.get_url_parts(request)
         return current_parent_path.rstrip("/") == self.get_ideal_parent_path(request)
 
     def has_ideal_slug(self, request: HttpRequest = None) -> bool:

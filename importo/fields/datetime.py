@@ -43,7 +43,6 @@ class DateField(typed.BaseTypedField):
         return dateparse.parse_date(value)
 
 
-
 class DateTimeField(typed.BaseTypedField):
     """
     A field that converts epoch timestamps or ISO-formatted datetime string

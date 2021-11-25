@@ -21,6 +21,7 @@ class EmptyValueError(ValueError):
     """
     Raised when a field finds an empty value in the source data, when it expected a non-empty value.
     """
+
     pass
 
 
@@ -57,7 +58,9 @@ class Field(CopyableMixin, CommandBoundObject):
     default_validators = []
     default_error_messages = {
         error_codes.INVALID: _("'%(value)s' is not a valid value for this field type."),
-        error_codes.INCOERCABLE: _("Could not coerce '%(value)s' to type %(return_type)s."),
+        error_codes.INCOERCABLE: _(
+            "Could not coerce '%(value)s' to type %(return_type)s."
+        ),
     }
 
     def __init__(
@@ -71,7 +74,7 @@ class Field(CopyableMixin, CommandBoundObject):
         required: bool = True,
         error_messages: Optional[Mapping[str, str]] = None,
         validators: Optional[Sequence[callable]] = (),
-        command: Optional['BaseImportCommand'] = None,
+        command: Optional["BaseImportCommand"] = None,
     ):
         self.name = None
         self.source = source
@@ -227,7 +230,9 @@ class Field(CopyableMixin, CommandBoundObject):
         if errors:
             raise ValidationError(errors)
 
-    def contribute_to_cleaned_data(self, cleaned_data: Dict[str,Any], raw_data: Any, is_new: bool) -> None:
+    def contribute_to_cleaned_data(
+        self, cleaned_data: Dict[str, Any], raw_data: Any, is_new: bool
+    ) -> None:
         """
         Updates the supplied `cleaned_data` dict with cleaned values extracted from `raw_data`.
         Note: The in-memory `cleaned_data` dict is modified in-place, and no value is returned.
@@ -256,17 +261,25 @@ class Field(CopyableMixin, CommandBoundObject):
         # Reraise ValueExtractionError and EmptyValueError as ValidationErrors
         # with more helpful messages, but allow all other exceptions to 'bubble up'
         try:
-            raw_value, value_requires_cleaning = self.extract_value(lookup_value, raw_data)
+            raw_value, value_requires_cleaning = self.extract_value(
+                lookup_value, raw_data
+            )
         except ValueExtractionError:
-            raise ValidationError(f"{type(self)} '{self.name}' could not extract '{lookup_value}' from the source data.", code=error_codes.VALUE_MISSING)
+            raise ValidationError(
+                f"{type(self)} '{self.name}' could not extract '{lookup_value}' from the source data.",
+                code=error_codes.VALUE_MISSING,
+            )
         except EmptyValueError:
-            raise ValidationError(f"{type(self)} '{self.name}' unexpectedly found an empty value for '{lookup_value}'.", code=error_codes.VALUE_EMPTY)
+            raise ValidationError(
+                f"{type(self)} '{self.name}' unexpectedly found an empty value for '{lookup_value}'.",
+                code=error_codes.VALUE_EMPTY,
+            )
 
         if not value_requires_cleaning:
             return raw_value
         return self.clean(raw_value)
 
-    def extract_value(self, key: str, raw_data: Any) -> Tuple(Any,bool):
+    def extract_value(self, key: str, raw_data: Any) -> Tuple(Any, bool):
         """
         Attempt to extract a value from `raw_data` using `key`. If the value is missing
         or empty, raise some kind of error, or return a different value according to the
@@ -320,7 +333,9 @@ class Field(CopyableMixin, CommandBoundObject):
 
             return value, requires_cleaning
 
-    def update_object(self, obj: Model, cleaned_data: Dict[str,Any], is_new: bool) -> None:
+    def update_object(
+        self, obj: Model, cleaned_data: Dict[str, Any], is_new: bool
+    ) -> None:
         """
         Updates the relevant field values on the target model instance (`obj`) according
         to the values in `cleaned_data`. Note: The in-memory `obj` is modified in-place,
@@ -351,7 +366,7 @@ class ListField(Field):
 
     def __init__(
         self,
-        sub_fields: Dict[str,Field],
+        sub_fields: Dict[str, Field],
         *,
         source: str,
         target_field: str,
@@ -362,7 +377,7 @@ class ListField(Field):
         required: bool = True,
         error_messages: Optional[Mapping[str, str]] = None,
         validators: Optional[Sequence[callable]] = (),
-        command: Optional['BaseImportCommand'] = None,
+        command: Optional["BaseImportCommand"] = None,
     ):
         if flatten and len(sub_fields) > 1:
             raise ValueError(
@@ -387,7 +402,7 @@ class ListField(Field):
             command=command,
         )
 
-    def bind_to_command(self, command: 'BaseImportCommand') -> None:
+    def bind_to_command(self, command: "BaseImportCommand") -> None:
         super().bind_to_command(command)
         for field in self.sub_fields.values():
             field.bind_to_command(command)

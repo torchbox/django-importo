@@ -5,6 +5,7 @@ from urllib.parse import unquote_plus
 
 from django.core.exceptions import ValidationError
 from django.utils.html import strip_tags
+from django.utils.translation import gettext_lazy as _
 
 from importo.constants import NOT_SPECIFIED
 
@@ -80,7 +81,7 @@ class TextField(BaseTypedField):
         on_max_length_exceeded: Optional[str] = NOT_SPECIFIED,
         error_messages: Optional[Mapping[str, str]] = None,
         validators: Optional[Sequence[callable]] = (),
-        command: Optional['BaseImportCommand'] = None,
+        command: Optional["BaseImportCommand"] = None,
     ):
         if modifiers:
             self.modifiers = list(modifiers)
@@ -150,7 +151,7 @@ class TextField(BaseTypedField):
             if e.code == error_codes.MAX_LENGTH_EXCEEDED:
                 strategy = self.on_max_length_exceeded
                 if strategy == strategy_codes.TRIM_TO_FIT:
-                    value = value[:self.max_length]
+                    value = value[: self.max_length]
                 elif strategy == strategy_codes.USE_FALLBACK:
                     return self.get_fallback()
                 elif callable(strategy):

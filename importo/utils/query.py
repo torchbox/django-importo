@@ -5,10 +5,9 @@ from typing import Any, Dict, Set, Tuple, Type
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import OneToOneRel, Q
 from django.db.models.functions import Coalesce
+from tate.legacy.models import LegacyPageMixin
 from wagtail.core.models import Page, get_page_models
 from wagtail.core.query import PageQuerySet
-
-from tate.legacy.models import LegacyPageMixin
 
 
 def get_legacy_page_type_related_names(

@@ -4,20 +4,16 @@ from io import BytesIO
 from typing import Any, Dict, Optional, Sequence, Tuple
 
 import PIL
-
-from django.core.files.uploadedfile import SimpleUploadedFile, UploadedFile
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile, UploadedFile
 from django.db.models import Model
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from importo.constants import NOT_SPECIFIED
 from importo.errors import SkipField, SkipRow
-from importo.utils.io import (
-    fetch_file,
-    filename_from_url,
-    static_file_to_bytesio,
-)
+from importo.utils.io import fetch_file, filename_from_url, static_file_to_bytesio
+
 from . import base, constants, error_codes, strategy_codes
 
 DUMMY_IMAGE_PATH = "importo/dummy_files/dummy.png"
@@ -219,7 +215,9 @@ class FileField(base.Field):
             self.validate(value)
             self.run_validators(value)
         except ValidationError as e:
-            return self.handle_invalid_file(value, e, getattr(e, "code", error_codes.INVALID))
+            return self.handle_invalid_file(
+                value, e, getattr(e, "code", error_codes.INVALID)
+            )
         return value
 
     def handle_invalid_file(
@@ -274,7 +272,7 @@ class FileField(base.Field):
             msg = self.error_messages[code] % {"extension": extension}
             raise ValidationError(msg, code=code)
 
-    def update_object(self, obj: Model, cleaned_data: Dict[str,Any], is_new: bool):
+    def update_object(self, obj: Model, cleaned_data: Dict[str, Any], is_new: bool):
         target_attr = self.target_field or self.name
         original_value = getattr(obj, target_attr, None)
         new_value = cleaned_data.get(target_attr)
@@ -289,7 +287,9 @@ class FileField(base.Field):
 class ImageFileField(FileField):
     dummy_file_path = DUMMY_IMAGE_PATH
     default_error_messages = {
-        error_codes.INVALID: _("The downloaded file '%(filename)s' is not a valid image."),
+        error_codes.INVALID: _(
+            "The downloaded file '%(filename)s' is not a valid image."
+        ),
         error_codes.MAX_FILESIZE_EXCEEDED: _(
             "The file is %(mb)sMB in size, which exceeds the 30MB limit.",
         ),
@@ -304,7 +304,9 @@ class ImageFileField(FileField):
         strategy_codes.SHRINK_IMAGE
     ]
     on_max_dimensions_exceeded_default = strategy_codes.RAISE_ERROR
-    on_extension_invalid_choices = FileField.on_file_invalid_choices + [strategy_codes.CONVERT_TO_WEBP]
+    on_extension_invalid_choices = FileField.on_file_invalid_choices + [
+        strategy_codes.CONVERT_TO_WEBP
+    ]
 
     def __init__(
         self,

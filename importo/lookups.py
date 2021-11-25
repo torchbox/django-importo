@@ -12,7 +12,12 @@ from importo.utils.url import looks_like_internal_url
 class BaseLookup:
     __slots__ = ["valid_patterns", "invalid_patterns"]
 
-    def __init__(self, *, valid_patterns: Sequence[re.Pattern] = None, invalid_patterns: Sequence[re.Pattern] = None):
+    def __init__(
+        self,
+        *,
+        valid_patterns: Sequence[re.Pattern] = None,
+        invalid_patterns: Sequence[re.Pattern] = None,
+    ):
         self.valid_patterns = valid_patterns or ()
         self.invalid_patterns = invalid_patterns or ()
 
@@ -49,14 +54,22 @@ class BaseLookup:
         raise NotImplementedError
 
 
-
 class FieldLookup(BaseLookup):
     __slots__ = ["lookup_field", "lookup_type", "valid_patterns", "invalid_patterns"]
 
-    def __init__(self, *, lookup_field: str, lookup_type: str = "exact", valid_patterns: Sequence[re.Pattern] = None, invalid_patterns: Sequence[re.Pattern] = None):
+    def __init__(
+        self,
+        *,
+        lookup_field: str,
+        lookup_type: str = "exact",
+        valid_patterns: Sequence[re.Pattern] = None,
+        invalid_patterns: Sequence[re.Pattern] = None,
+    ):
         self.lookup_field = lookup_field
         self.lookup_type = lookup_type
-        super().__init__(valid_patterns=valid_patterns, invalid_patterns=invalid_patterns)
+        super().__init__(
+            valid_patterns=valid_patterns, invalid_patterns=invalid_patterns
+        )
 
     def validate_lookup_value(self, value: Any, *, model: ModelBase) -> bool:
         """
@@ -65,7 +78,7 @@ class FieldLookup(BaseLookup):
         if not value:
             raise ValueError
 
-        if '__' not in self.lookup_field:
+        if "__" not in self.lookup_field:
             try:
                 field = model._meta.get_field(self.lookup_field)
                 if field.editable:
@@ -94,5 +107,5 @@ class FieldLookup(BaseLookup):
         lookup_kwargs = self.get_lookup_kwargs(value)
         return queryset.filter(**lookup_kwargs)
 
-    def get_lookup_kwargs(self, value: Any) -> Dict[str,Any]:
-        return {f'{self.lookup_field}__{self.lookup_type}': value}
+    def get_lookup_kwargs(self, value: Any) -> Dict[str, Any]:
+        return {f"{self.lookup_field}__{self.lookup_type}": value}

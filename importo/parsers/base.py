@@ -3,10 +3,9 @@ from typing import Any
 
 import bs4
 from django.utils.functional import cached_property
-from wagtail.images import get_image_model
-
 from tate.legacy.finders import DocumentFinder, ImageFinder, PageFinder
 from tate.legacy.utils.classes import CommandBoundObject
+from wagtail.images import get_image_model
 
 Image = get_image_model()
 

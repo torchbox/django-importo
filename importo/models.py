@@ -22,6 +22,7 @@ class LegacyModelMixin(models.Model):
     @classmethod
     def extra_search_fields(cls) -> List[Any]:
         from wagtail.search import index
+
         return [
             index.FilterField(cls.LEGACY_ID_FIELD),
             index.SearchField(cls.LEGACY_ID_FIELD),
@@ -34,6 +35,7 @@ class LegacyImportedModelMixin(LegacyModelMixin):
     @classmethod
     def extra_search_fields(cls) -> List[Any]:
         from wagtail.search import index
+
         return super().extra_search_fields + [
             index.FilterField("last_imported_at"),
         ]
@@ -50,6 +52,7 @@ class LegacyReferenceModelMixin(models.Model):
     stored instead. These 'legacy_id' values will be evaluated again later
     in the import process (once the target model is populated).
     """
+
     REAL_REFERENCE_FIELD: str = ""
 
     legacy_id = models.CharField(

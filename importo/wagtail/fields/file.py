@@ -5,17 +5,16 @@ from django.utils.translation import gettext_lazy as _
 from wagtail.documents import get_document_model
 from wagtail.images import get_image_model
 
+from importo.fields.file import FileField as RegularFileField
+from importo.fields.file import ImageFileField as RegularImageFileField
 from importo.utils.io import get_bytesio_hash
-from importo.fields.file import FileField as RegularFileField, ImageFileField as RegularImageFileField
-
 
 Image = get_image_model()
 Document = get_document_model()
 
 
 class SetHashMixin:
-
-    def update_object(self, obj: Model, cleaned_data: Dict[str,Any], is_new: bool):
+    def update_object(self, obj: Model, cleaned_data: Dict[str, Any], is_new: bool):
         target_attr = self.target_field or self.name
         original_value = getattr(obj, target_attr, None)
         new_value = cleaned_data.get(target_attr)
@@ -56,7 +55,6 @@ class FileField(SetHashMixin, RegularFileField):
 
 
 class ImageFileField(SetHashMixin, RegularImageFileField):
-
     def set_object_value(self, obj, attribute_name, value):
         """
         When updating the 'file' field of an Image instance, while we have the

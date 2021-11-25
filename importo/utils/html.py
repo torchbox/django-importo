@@ -6,6 +6,7 @@ LINEBREAKS_REGEX = r"\n"
 BR_REGEX = r"<br/>"
 MULTI_BR_REGEX = r"<br/?>(\s?<br/?>)*"
 
+
 def tidy_html(
     value: str,
     remove_empty_paragraphs: bool = True,

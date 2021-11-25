@@ -24,11 +24,10 @@ from django.db.models import Model, QuerySet
 from django.forms.utils import ErrorDict, ErrorList
 from django.utils import timezone
 from django.utils.functional import cached_property
+from tate.legacy.readers.base import BaseReader
 from wagtail.contrib.redirects.models import Redirect
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Collection, Page, Site
-
-from tate.legacy.readers.base import BaseReader
 
 from . import constants, fields, finders, models, readers
 from .errors import BasePaginatedReaderException, CommandOptionError, SkipField, SkipRow
@@ -664,13 +663,14 @@ class ReadingCommand(LoggingCommand):
             return cache.delete(self.resume_key)
 
 
-
 class DeclarativeFieldsMetaclass(type):
     """Collect Fields declared on the base classes."""
+
     def __new__(mcs, name, bases, attrs):
         # Collect fields from current class and remove them from attrs.
-        attrs['declared_fields'] = {
-            key: attrs.pop(key) for key, value in list(attrs.items())
+        attrs["declared_fields"] = {
+            key: attrs.pop(key)
+            for key, value in list(attrs.items())
             if isinstance(value, fields.Field)
         }
 
@@ -680,7 +680,7 @@ class DeclarativeFieldsMetaclass(type):
         declared_fields = {}
         for base in reversed(new_class.__mro__):
             # Collect fields from base class.
-            if hasattr(base, 'declared_fields'):
+            if hasattr(base, "declared_fields"):
                 declared_fields.update(base.declared_fields)
 
             # Field shadowing.
@@ -694,7 +694,9 @@ class DeclarativeFieldsMetaclass(type):
         return new_class
 
 
-class BaseImportCommand(FindersMixin, ReadingCommand, metaclass=DeclarativeFieldsMetaclass):
+class BaseImportCommand(
+    FindersMixin, ReadingCommand, metaclass=DeclarativeFieldsMetaclass
+):
     target_model = None
 
     # TODO: Figure out a way to do this with fields
@@ -754,7 +756,12 @@ class BaseImportCommand(FindersMixin, ReadingCommand, metaclass=DeclarativeField
     def fields(self):
         # Order fields by 'clean cost' so that 'cheap' field errors prevent unncessary
         # cleaning of more 'expensive' fields
-        fields = {k: v for k, v in sorted(self.declared_fields.items(), key=lambda x: x[1].clean_cost)}
+        fields = {
+            k: v
+            for k, v in sorted(
+                self.declared_fields.items(), key=lambda x: x[1].clean_cost
+            )
+        }
         for name, field in fields.items():
             # set name on each field and bind to this command instance
             field.name = name
@@ -1240,7 +1247,7 @@ class BaseQuerySetProcessingCommand(ReadingCommand):
 
 
 class BaseWagtailQuerysetProcessingCommand(BaseQuerySetProcessingCommand):
-     def process_row(
+    def process_row(
         self,
         row_number: int,
         data: Any,
@@ -1255,10 +1262,14 @@ class BaseWagtailQuerysetProcessingCommand(BaseQuerySetProcessingCommand):
                 self.logger.info(self.get_object_description(data))
                 self.logger.info("The 'specific' page is unavailable, so skipping.")
                 return None
-        return super().process_row(self, row_number, data, max_page_size=max_page_size, current_page_size=current_page_size, current_page_row_number=current_page_row_number)
-
-
-
+        return super().process_row(
+            self,
+            row_number,
+            data,
+            max_page_size=max_page_size,
+            current_page_size=current_page_size,
+            current_page_row_number=current_page_row_number,
+        )
 
 
 class FixupError:
@@ -1292,7 +1303,9 @@ class FixupError:
         return "\n".join(lines)
 
 
-class BaseInformationArchitectureFixupCommand(FindersMixin, BaseWagtailQuerysetProcessingCommand):
+class BaseInformationArchitectureFixupCommand(
+    FindersMixin, BaseWagtailQuerysetProcessingCommand
+):
     source_queryset = Page.objects.filter(depth__gt=1)
 
     def setup(self, options: Dict[str, Any]) -> None:
@@ -1469,7 +1482,6 @@ class BaseInformationArchitectureFixupCommand(FindersMixin, BaseWagtailQuerysetP
                     self.save_object(unblocked_page)
 
 
-
 class BaseContentFixupCommand(FindersMixin, BaseWagtailQuerysetProcessingCommand):
     def add_arguments(self, parser: argparse.ArgumentParser):
         parser.add_argument(
@@ -1537,7 +1549,9 @@ class BaseContentFixupCommand(FindersMixin, BaseWagtailQuerysetProcessingCommand
                 if self.fixup_streamfield_value(obj, field.name):
                     self.changed_fields.append(field.name)
 
-    def on_page_completed(self, page_number: int, reason: BasePaginatedReaderException = None) -> None:
+    def on_page_completed(
+        self, page_number: int, reason: BasePaginatedReaderException = None
+    ) -> None:
         super().on_page_completed(page_number, reason=reason)
         if self.fixup_errors:
             self.logger.warning(
