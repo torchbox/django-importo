@@ -14,16 +14,16 @@ from wagtail.core.urls import serve_pattern
 from wagtail.documents import get_document_model
 from wagtail.images import get_image_model
 
-from importo.finders import BaseFinder, BaseLegacyModelFinder
-from importo.wagtail.utils.query import get_legacy_page_matches, get_legacy_path_matches
+from importo.finders import BaseFinder
 from importo.utils import get_dummy_request
 from importo.utils.io import filename_from_url
+from importo.wagtail.utils.query import get_legacy_page_matches, get_legacy_path_matches
 
 Image = get_image_model()
 Document = get_document_model()
 
 
-class BaseMediaFinder(BaseLegacyModelFinder):
+class BaseMediaFinder(BaseFinder):
     """
     A base class for ImageFinder and DocumentFinder that is capable of finding
     files by path/filename as well as by legacy_id or pk.
@@ -199,7 +199,7 @@ class SiteFinder(BaseFinder):
         return result
 
 
-class PageFinder(BaseLegacyModelFinder):
+class PageFinder(BaseFinder):
     """
     Helps importers to find Wagtail Page instance by url/path or legacy id.
     """
@@ -374,9 +374,7 @@ class PageFinder(BaseLegacyModelFinder):
             if route_start_page is None:
                 route_start_page = site.root_page.specific
 
-            return route_start_page.route(
-                self.dummy_request, remaining_components
-            ).page
+            return route_start_page.route(self.dummy_request, remaining_components).page
         raise Http404
 
     def get_sites_to_search(

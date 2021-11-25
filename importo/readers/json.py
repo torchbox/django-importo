@@ -27,7 +27,7 @@ class SimpleJSONFileReader(BaseReader):
         super().__init__(start_row, stop_row)
 
     def fetch(self, start_row: int, stop_row: int) -> Iterable[dict]:
-        with open(self.file, 'rb') as f:
+        with open(self.file, "rb") as f:
             data = json.loads(f.read(), cls=self.json_decoder)
         for i, row in enumerate(data, start=1):
             if start_row and i < start_row:

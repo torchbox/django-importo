@@ -3,7 +3,6 @@ from urllib.parse import urlparse
 
 import bs4
 from django.core.exceptions import ObjectDoesNotExist
-
 from tate.utils.html import tidy_html
 
 from .base import BaseParser

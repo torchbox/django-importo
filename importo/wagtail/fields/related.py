@@ -50,7 +50,7 @@ class ImageReferenceField(BaseFinderField):
         alt_source: Optional[str] = None,
         error_messages: Optional[Mapping[str, str]] = None,
         validators: Optional[Sequence[callable]] = (),
-        command: Optional['BaseImportCommand'] = None,
+        command: Optional["BaseImportCommand"] = None,
     ):
         self.file_path_replace = file_path_replace or ()
         self.title_source = title_source
@@ -120,7 +120,9 @@ class ImageReferenceField(BaseFinderField):
             try:
                 # ImageFileField.update_object() does some useful additional stuff,
                 # like setting the file_hash, width and height fields
-                image_field.update_object(obj, cleaned_data={'file': image_file}, is_new=True)
+                image_field.update_object(
+                    obj, cleaned_data={"file": image_file}, is_new=True
+                )
             except Exception as e:
                 raise error_to_reraise from e
             try:
@@ -156,13 +158,31 @@ class PageReferenceField(BaseFinderField):
     def __init__(
         self,
         *,
-
+        source: str = None,
+        target_field: str = None,
+        fallback: Optional[Any] = NOT_SPECIFIED,
         page_type: ModelBase = None,
         on_not_found: Optional[Union[str, None]] = NOT_SPECIFIED,
-        **kwargs,
+        on_missing_value: Optional[str] = NOT_SPECIFIED,
+        on_empty_value: Optional[str] = NOT_SPECIFIED,
+        required: bool = True,
+        error_messages: Optional[Mapping[str, str]] = None,
+        validators: Optional[Sequence[callable]] = (),
+        command: Optional["BaseImportCommand"] = None,
     ):
         self.page_type = page_type
-        super().__init__(*args, on_not_found=on_not_found, **kwargs)
+        super().__init__(
+            source=source,
+            target_field=target_field,
+            fallback=fallback,
+            on_not_found=on_not_found,
+            on_missing_value=on_missing_value,
+            on_empty_value=on_empty_value,
+            required=required,
+            error_messages=error_messages,
+            validators=validators,
+            command=command,
+        )
 
     def validate(self, value):
         if isinstance(value, Page):

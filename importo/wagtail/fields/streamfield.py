@@ -1,10 +1,10 @@
-from typing import Any
 import json
+from typing import Any
 
 from django.core.serializers.json import DjangoJSONEncoder
 
-from importo.fields.constants import CLEAN_COST_HIGH
 from importo.fields.base import BaseParsedField
+from importo.fields.constants import CLEAN_COST_HIGH
 from importo.wagtail.parsers.streamfield import StreamFieldContentParser
 
 

@@ -15,7 +15,7 @@ from wagtail.core.models import Collection, Page, Site
 
 from importo.commands.base import BaseImportCommand, BaseQuerySetProcessingCommand, FindersMixin
 from importo.readers import BasePaginatedReaderException
-from importo.wagtail.finders import PageFinder, ImageFinder, DocumentFinder
+from importo.wagtail.finders import DocumentFinder, ImageFinder, PageFinder
 from importo.wagtail.parsers.rich_text import RichTextParser
 from importo.wagtail.utils import get_unique_slug
 
@@ -41,7 +41,9 @@ class BasePageImportCommand(BaseImportCommand):
     def process_options(self, options: Mapping[str, Any]) -> None:
         super().process_options(options)
         self.parent_id = options.get("parent_id")
-        self.create_redirects = apps.is_installed("wagtail.contrib.redirects") and not options.get("no_redirects")
+        self.create_redirects = apps.is_installed(
+            "wagtail.contrib.redirects"
+        ) and not options.get("no_redirects")
 
     def validate_object(self, obj: Page, is_new: bool) -> None:
         if is_new:
@@ -89,7 +91,7 @@ class BasePageImportCommand(BaseImportCommand):
         with transaction.atomic():
             parent.add_child(instance=page)
 
-        if getattr(page, 'legacy_path', None) and self.create_redirects:
+        if getattr(page, "legacy_path", None) and self.create_redirects:
             site = parent.get_site() or Site.find_for_request(self.dummy_request)
             old_path = Redirect.normalise_path(page.legacy_path)
             try:
@@ -185,7 +187,7 @@ class BaseCollectionMemberImportCommand(BaseImportCommand):
 
 
 class BaseWagtailQuerysetProcessingCommand(BaseQuerySetProcessingCommand):
-     def process_row(
+    def process_row(
         self,
         row_number: int,
         data: Any,
@@ -200,7 +202,14 @@ class BaseWagtailQuerysetProcessingCommand(BaseQuerySetProcessingCommand):
                 self.logger.info(self.get_object_description(data))
                 self.logger.info("The 'specific' page is unavailable, so skipping.")
                 return None
-        return super().process_row(self, row_number, data, max_page_size=max_page_size, current_page_size=current_page_size, current_page_row_number=current_page_row_number)
+        return super().process_row(
+            self,
+            row_number,
+            data,
+            max_page_size=max_page_size,
+            current_page_size=current_page_size,
+            current_page_row_number=current_page_row_number,
+        )
 
 
 class FixupError:
@@ -234,7 +243,9 @@ class FixupError:
         return "\n".join(lines)
 
 
-class BaseInformationArchitectureFixupCommand(FindersMixin, BaseWagtailQuerysetProcessingCommand):
+class BaseInformationArchitectureFixupCommand(
+    FindersMixin, BaseWagtailQuerysetProcessingCommand
+):
     source_queryset = Page.objects.filter(depth__gt=1)
 
     def setup(self, options: Dict[str, Any]) -> None:
@@ -411,7 +422,6 @@ class BaseInformationArchitectureFixupCommand(FindersMixin, BaseWagtailQuerysetP
                     self.save_object(unblocked_page)
 
 
-
 class BaseContentFixupCommand(FindersMixin, BaseWagtailQuerysetProcessingCommand):
     def add_arguments(self, parser: argparse.ArgumentParser):
         parser.add_argument(
@@ -473,7 +483,9 @@ class BaseContentFixupCommand(FindersMixin, BaseWagtailQuerysetProcessingCommand
                 if self.fixup_streamfield_value(obj, field.name):
                     self.changed_fields.append(field.name)
 
-    def on_page_completed(self, page_number: int, reason: BasePaginatedReaderException = None) -> None:
+    def on_page_completed(
+        self, page_number: int, reason: BasePaginatedReaderException = None
+    ) -> None:
         super().on_page_completed(page_number, reason=reason)
         if self.fixup_errors:
             self.logger.warning(

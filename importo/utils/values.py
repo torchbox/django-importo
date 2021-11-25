@@ -7,6 +7,7 @@ class ValueExtractionError(KeyError):
     Raised when a field expects a raw value to be present in the source data, but it cannot be found
     using the specified value path.
     """
+
     pass
 
 
@@ -57,8 +58,10 @@ def extract_row_value(key: str, source: Any, fallback: Any = None) -> Any:
             new_source = extract_row_value(segments.pop(0), source, fallback)
             return extract_row_value(".".join(segments), new_source, fallback)
 
-    except (KeyError, AttributeError, ValueError, SourceDataValueMissing):
-        raise SourceDataValueMissing(f"'{key}' could not be extracted from {type(source)}: {source}")
+    except (KeyError, AttributeError, ValueError, ValueExtractionError):
+        raise ValueExtractionError(
+            f"'{key}' could not be extracted from {type(source)}: {source}"
+        )
 
     return fallback
 

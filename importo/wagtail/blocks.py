@@ -1,9 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorList
+from tate.utils.blocks import OrderedSubBlocksStructBlock
 from wagtail.core import blocks
 from wagtail.core.blocks.struct_block import StructBlockValidationError
-
-from tate.utils.blocks import OrderedSubBlocksStructBlock
 
 
 class LegacyIDBlock(blocks.CharBlock):

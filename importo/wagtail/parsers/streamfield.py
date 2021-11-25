@@ -6,13 +6,7 @@ from urllib.parse import urlparse
 from bs4.element import NavigableString, Tag
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils.text import slugify
-from wagtail.images import get_image_model
-
-from tate.core.blocks.banners import (
-    BannerHeightChoices,
-    TextAlignmentChoices,
-    TextStyleChoices,
-)
+from tate.core.blocks.banners import BannerHeightChoices, TextAlignmentChoices, TextStyleChoices
 from tate.core.blocks.utils import EmbedHTMLBlock, TableBlock
 from tate.core.constants import (
     CTAIconChoices,
@@ -25,6 +19,7 @@ from tate.core.constants import (
     WrapStyleChoices,
 )
 from tate.events.models import EventVenuePage
+from wagtail.images import get_image_model
 
 from .base import BaseRichTextContainingParser
 from .richtext import RichTextParser

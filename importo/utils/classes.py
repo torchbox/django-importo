@@ -56,25 +56,25 @@ class LoggingShortcutsMixin:
 
 
 class CommandBoundMixin:
-    def __init__(self, *args, command: 'BaseCommand' = None, **kwargs):
+    def __init__(self, *args, command: "BaseCommand" = None, **kwargs):
         if command is None:
             self.command = command
         else:
             self.bind_to_command(command)
         super().__init__(*args, **kwargs)
 
-    def bind_to_command(self, command: 'BaseCommand') -> None:
+    def bind_to_command(self, command: "BaseCommand") -> None:
         self.command = command
 
     def check_bound_to_command(self):
-        if not isinstance(self.command, 'BaseCommand'):
+        if not isinstance(self.command, "BaseCommand"):
             raise RuntimeError(
                 f"{self} is not bound to a command. Did you forget to run bind_to_command()?"
             )
 
 
 class CommandBoundObject(CommandBoundMixin, LoggingShortcutsMixin):
-    def __init__(self, command: 'BaseCommand' = None):
+    def __init__(self, command: "BaseCommand" = None):
         super().__init__(command=command)
 
     def get_logger(self):

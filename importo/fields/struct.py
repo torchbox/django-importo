@@ -20,7 +20,7 @@ class ListField(base.Field):
 
     def __init__(
         self,
-        sub_fields: Dict[str,base.Field],
+        sub_fields: Dict[str, base.Field],
         *,
         flatten: bool = False,
         source: str,
@@ -31,7 +31,7 @@ class ListField(base.Field):
         required: bool = True,
         error_messages: Optional[Mapping[str, str]] = None,
         validators: Optional[Sequence[callable]] = (),
-        command: Optional['BaseImportCommand'] = None,
+        command: Optional["BaseImportCommand"] = None,
     ):
         if flatten and len(sub_fields) > 1:
             raise ValueError(
@@ -56,7 +56,7 @@ class ListField(base.Field):
             command=command,
         )
 
-    def bind_to_command(self, command: 'BaseImportCommand') -> None:
+    def bind_to_command(self, command: "BaseImportCommand") -> None:
         super().bind_to_command(command)
         for field in self.sub_fields.values():
             field.bind_to_command(command)

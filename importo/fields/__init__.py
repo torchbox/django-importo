@@ -1,4 +1,4 @@
-from .base import Field, NoopField, ListField, BaseParsedField
+from .base import BaseParsedField, Field, ListField, NoopField
 from .constants import *  # NOQA
 from .datetime import DateField, DateTimeField
 from .error_codes import *  # NOQA

@@ -18,20 +18,15 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model
 from django.utils import dateparse
 from django.utils.functional import cached_property
-
 from django.utils.translation import gettext_lazy as _
-
 
 from importo.constants import NOT_SPECIFIED
 from importo.errors import SkipField, SkipRow
 
-
 from . import constants, error_codes, strategy_codes
 from .base import Field
 
-
 User = get_user_model()
-
 
 
 # -------------------------------------------------------------------
@@ -41,10 +36,16 @@ User = get_user_model()
 
 class BaseRelationshipField(Field):
     on_not_found_choices = [
-        strategy_codes.NOT_SPECIFIED, strategy_codes.RAISE_ERROR, strategy_codes.SKIP_FIELD, strategy_codes.USE_FALLBACK]
+        strategy_codes.NOT_SPECIFIED,
+        strategy_codes.RAISE_ERROR,
+        strategy_codes.SKIP_FIELD,
+        strategy_codes.USE_FALLBACK,
+    ]
     on_not_found_default = strategy_codes.RAISE_ERROR
     default_error_messages = {
-        error_codes.OBJECT_NOT_FOUND: _("No object could be found matching the value '%(value)s'."),
+        error_codes.OBJECT_NOT_FOUND: _(
+            "No object could be found matching the value '%(value)s'."
+        ),
     }
 
     # Cleaning requires database lookups, so should be done after
@@ -160,6 +161,7 @@ class BaseMappedReferenceField(BaseRelationshipField):
         queryset = self.model.objects.all()
         try:
             from wagtail.core.models import Page
+
             if issubclass(self.model, Page):
                 return queryset.defer_streamfields()
         except ImportError:
@@ -181,4 +183,5 @@ class UserReferenceField(BaseFinderField):
     A field that converts legacy user usernames or ID values to Django User
     objects, with the help of the bound command instance's `UserFinder`.
     """
+
     finder_name = "users"
