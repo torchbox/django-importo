@@ -5,7 +5,18 @@ import sys
 import uuid
 from datetime import date, datetime
 from io import BytesIO
-from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple, Type, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    Tuple,
+    Type,
+    Union,
+)
 from urllib.parse import unquote_plus, urlparse
 
 import bleach

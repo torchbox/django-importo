@@ -11,7 +11,11 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core.cache import cache
-from django.core.exceptions import NON_FIELD_ERRORS, ImproperlyConfigured, ValidationError
+from django.core.exceptions import (
+    NON_FIELD_ERRORS,
+    ImproperlyConfigured,
+    ValidationError,
+)
 from django.core.management.base import BaseCommand as DjangoBaseCommand
 from django.core.paginator import Paginator
 from django.core.serializers.json import DjangoJSONEncoder

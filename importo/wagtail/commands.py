@@ -13,7 +13,11 @@ from wagtail.contrib.redirects.models import Redirect
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Collection, Page, Site
 
-from importo.commands.base import BaseImportCommand, BaseQuerySetProcessingCommand, FindersMixin
+from importo.commands.base import (
+    BaseImportCommand,
+    BaseQuerySetProcessingCommand,
+    FindersMixin,
+)
 from importo.readers import BasePaginatedReaderException
 from importo.wagtail.finders import DocumentFinder, ImageFinder, PageFinder
 from importo.wagtail.parsers.rich_text import RichTextParser

@@ -6,7 +6,11 @@ from urllib.parse import urlparse
 from bs4.element import NavigableString, Tag
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils.text import slugify
-from tate.core.blocks.banners import BannerHeightChoices, TextAlignmentChoices, TextStyleChoices
+from tate.core.blocks.banners import (
+    BannerHeightChoices,
+    TextAlignmentChoices,
+    TextStyleChoices,
+)
 from tate.core.blocks.utils import EmbedHTMLBlock, TableBlock
 from tate.core.constants import (
     CTAIconChoices,
