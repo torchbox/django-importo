@@ -2,8 +2,7 @@ name: "Deploy"
 
 on:
   release:
-    types:
-      - created
+    types: [created]
 
 jobs:
   publish_to_pypi:
