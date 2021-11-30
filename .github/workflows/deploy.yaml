@@ -1,12 +1,9 @@
 name: "Deploy"
 
 on:
-  push:
-    tags:
-      - v*
-    branches:
-      - main
-      - stable/*
+  release:
+    types:
+      - created
 
 jobs:
   publish_to_pypi:
