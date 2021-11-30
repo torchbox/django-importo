@@ -1,15 +1,17 @@
-name: "Package"
+name: "Deploy"
 
 on:
   push:
     tags:
       - v*
+    branches:
+      - main
+      - stable/*
 
 jobs:
   publish_to_pypi:
     name: 📦 Publish to PyPi
     runs-on: ubuntu-latest
-    if: github.actor == github.repository_owner
     env:
       DJANGO_SETTINGS_MODULE: importo.testapp.settings
     steps:
