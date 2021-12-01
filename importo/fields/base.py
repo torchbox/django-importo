@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 
-from importo.constants import NOT_SPECIFIED
+from importo.constants import NOT_SPECIFIED, EMPTY_VALUES
 from importo.errors import SkipField, SkipRow
 from importo.parsers import BaseParser
 from importo.utils.classes import CommandBoundObject, CopyableMixin
@@ -54,7 +54,7 @@ class Field(CopyableMixin, CommandBoundObject):
     clean_cost = constants.CLEAN_COST_LOW
 
     # as django.forms.Field
-    empty_values = list(constants.EMPTY_VALUES)
+    empty_values = list(EMPTY_VALUES)
     default_validators = []
     default_error_messages = {
         error_codes.INVALID: _("'%(value)s' is not a valid value for this field type."),

@@ -12,3 +12,6 @@ VERBOSITY_TO_LOGGING_LEVEL = {
 # Used as a default kwarg value where the distinction
 # between None and 'not provided' is important
 NOT_SPECIFIED = "__NS__"
+
+# Used by fields and lookups
+EMPTY_VALUES = (None, "", "NULL", "null", [], (), {})

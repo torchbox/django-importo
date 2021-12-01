@@ -5,7 +5,4 @@ CLEAN_COST_MEDIUM = 5
 CLEAN_COST_MEDIUM_HIGH = 7
 CLEAN_COST_HIGH = 10
 
-# Used to set `Field.empty_values`
-EMPTY_VALUES = (None, "", "NULL", "null", [], (), {})
-
 REPLACE_WITH_SPACE = ("<br>", "&nbsp;", "\n", "\r")
