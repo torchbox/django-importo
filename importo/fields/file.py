@@ -96,7 +96,7 @@ class FileField(base.Field):
         """
         valid_choices = self.on_download_error_choices
         if not callable(value) and value not in valid_choices:
-            raise TypeError(
+            raise ValueError(
                 "'on_download_error' must be a callable or one of the following "
                 f"values (not '{value}'): {valid_choices}."
             )
@@ -121,7 +121,7 @@ class FileField(base.Field):
         """
         valid_choices = self.on_file_invalid_choices
         if not callable(value) and value not in valid_choices:
-            raise TypeError(
+            raise ValueError(
                 "'on_file_invalid' must be a callable or one of the following "
                 f"values (not '{value}'): {valid_choices}."
             )
@@ -148,7 +148,7 @@ class FileField(base.Field):
         """
         valid_choices = self.on_extension_invalid_choices
         if not callable(value) and value not in valid_choices:
-            raise TypeError(
+            raise ValueError(
                 "'on_extension_invalid' must be a callable or one of the following "
                 f"values (not '{value}'): {valid_choices}."
             )
@@ -345,7 +345,7 @@ class ImageFileField(FileField):
         """
         valid_choices = self.on_max_dimensions_exceeded_choices
         if value not in valid_choices:
-            raise TypeError(
+            raise ValueError(
                 "'on_max_dimensions_exceeded' must be one of the following "
                 f"values (not '{value}'): {valid_choices}."
             )

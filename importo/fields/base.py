@@ -113,7 +113,7 @@ class Field(CopyableMixin, CommandBoundObject):
                 (on_empty_value, "on_empty_value"),
             ):
                 if value != NOT_SPECIFIED:
-                    raise TypeError(
+                    raise ValueError(
                         f"{repr(self)}: Using 'required=True' makes the '{option_name}' value redundant "
                         "(errors are always raised for missing or empty values)."
                     )
@@ -143,7 +143,7 @@ class Field(CopyableMixin, CommandBoundObject):
         """
         valid_choices = self.on_missing_value_choices
         if not callable(value) and value not in valid_choices:
-            raise TypeError(
+            raise ValueError(
                 "'on_missing_value' must be a callable or one of the following "
                 f"values (not '{value}'): {valid_choices}."
             )
@@ -168,7 +168,7 @@ class Field(CopyableMixin, CommandBoundObject):
         """
         valid_choices = self.on_empty_value_choices
         if not callable(value) and value not in valid_choices:
-            raise TypeError(
+            raise ValueError(
                 "'on_empty_value' must be a callable or one of the following "
                 f"values (not '{value}'): {valid_choices}."
             )

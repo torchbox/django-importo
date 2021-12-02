@@ -103,7 +103,7 @@ class BaseRelationshipField(Field):
     def on_not_found(self, value):
         valid_choices = self.on_not_found_choices
         if not callable(value) and value not in valid_choices:
-            raise TypeError(
+            raise ValueError(
                 "'on_not_found' must be a callable or one of the following "
                 f"values (not '{value}'): {valid_choices}."
             )

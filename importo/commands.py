@@ -983,7 +983,7 @@ class BaseImportCommand(
 
         if hasattr(error, "error_dict"):
             if field is not None:
-                raise TypeError(
+                raise ValueError(
                     "The argument `field` must be `None` when the `error` "
                     "argument contains errors for multiple fields."
                 )
