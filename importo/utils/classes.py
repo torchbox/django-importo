@@ -3,7 +3,7 @@ import warnings
 from typing import TYPE_CHECKING, Union
 
 from django.utils.functional import cached_property
-
+from importo.utils.inspection import accepts_kwarg
 from importo.constants import LOGGING_LINE_LENGTH
 
 if TYPE_CHECKING:
@@ -94,11 +94,14 @@ class CommandBoundObject(CommandBoundMixin, LoggingShortcutsMixin):
 
 class CopyableMixin:
     def __copy__(self):
-        return type(self)(**self.get_copy_kwargs())
-
-    def get_copy_kwargs(self):
-        return {
-            key.lstrip("_"): val
-            for key, val in self.__dict__.items()
-            if not isinstance(getattr(self.__class__, key, None), cached_property)
-        }
+        cls = self.__class__
+        init_kwargs = {}
+        attr_values = {}
+        for key, val in self.__dict__.items():
+            if accepts_kwarg(cls.__init__, key):
+                init_kwargs[key] = val
+            else:
+                attr_values[key] = val
+        new = cls(**init_kwargs)
+        new.__dict__.update(attr_values)
+        return new
