@@ -25,27 +25,26 @@ class BaseFinder(CommandBoundObject):
     select_related: Sequence[str] = None
     lookup_options: Sequence[BaseLookupOption] = []
 
-    # By default, it is assumed that no new model instances will be created
-    # while the import is running. Set this to `False` for subclasses where
-    # this is not the case.
+    # By default, assume that no new model instances will be created
+    # during the current import
     cache_lookup_failures: bool = True
+
+    @classmethod
+    def get_lookup_options(cls):
+        return cls.lookup_options
 
     def __init__(self, command: "BaseCommand"):
         super().__init__(command)
         self.result_cache = {}
         # Generate a list of lookup options that are bound to this instance.
-        # We could do this lazily in get_lookup_options(), but doing it here
-        # means errors can be raised on finder initialization, which is a tad
-        # more obvious.
-        self._bound_lookup_options = []
-        for option in self.lookup_options:
-            self._bound_lookup_options.append(option.get_finder_bound_copy(self))
+        # We doing this here means that errors can be raised on finder
+        # initialization, which is much more obvious than generating lazily
+        self.bound_lookup_options = []
+        for option in self.get_lookup_options():
+            self.bound_lookup_options.append(option.get_finder_bound_copy(self))
 
     def get_model(self):
         return self.model
-
-    def get_lookup_options(self):
-        return self._bound_lookup_options
 
     def get_lookup_value(self, raw_value: Any) -> LookupValue:
         """

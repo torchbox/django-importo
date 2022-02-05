@@ -4,6 +4,8 @@ from urllib.parse import ParseResult, urlparse
 from django.core.validators import EMPTY_VALUES
 from django.utils.functional import cached_property
 
+from importo.utils.urlpath import normalize_path
+
 if TYPE_CHECKING:
     from .base import BaseFinder
     from .lookup_options import BaseLookupOption
@@ -43,7 +45,7 @@ class LookupValue:
         Checks this instance for compatibility with each of the finder's
         lookup options, and returns a tuple of the compatible ones.
         """
-        return tuple(option for option in self.finder.get_lookup_options() if option.is_enabled() and option.value_is_compatible(self))
+        return tuple(option for option in self.finder.bound_lookup_options if option.is_enabled() and option.value_is_compatible(self))
 
     @cached_property
     def urlparsed(self) -> ParseResult:
@@ -56,6 +58,10 @@ class LookupValue:
         if isinstance(self.raw, str):
             return urlparse(self.raw)
         return None
+
+    @cached_property
+    def normalized_path(self) -> str:
+        return normalize_path(self.urlparsed.path)
 
     @cached_property
     def cache_keys(self) -> Set[Any]:
