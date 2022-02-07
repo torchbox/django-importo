@@ -8,7 +8,7 @@ from importo.utils.urlpath import is_external_url, is_internal_url
 from .modelfield import MTIModelFieldLookupOption
 
 __all__ = [
-    "LegacyPathLookupOption"
+    "LegacyURLLookupOption"
     "ValueDomainInvalid",
     "DomainSpecificLookupMixin",
 ]
@@ -28,7 +28,7 @@ class DomainSpecificValuesMixin:
         return keys
 
 
-class LegacyPathLookupOption(DomainSpecificValuesMixin, MTIModelFieldLookupOption):
+class LegacyURLLookupOption(DomainSpecificValuesMixin, MTIModelFieldLookupOption):
     def __init__(
         self,
         *,

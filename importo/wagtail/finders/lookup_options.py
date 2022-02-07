@@ -1,15 +1,17 @@
 import re
-from typing import Sequence
+from typing import Iterable, Sequence
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-from wagtail.core.models import Page
+from django.utils.functional import cached_property
+from wagtail.core.models import Page, Site
 from wagtail.core.query import PageQuerySet
 from wagtail.core.urls import serve_pattern
 
 from importo.finders.lookup_options import BaseLookupOption, LookupValueError, ValueTypeIncompatible, ValueDomainInvalid
 from importo.finders.lookup_value import LookupValue
 from importo.utils.urlpath import is_external_url
+from importo.wagtail.utils import get_dummy_request
 
 
 class ValueIncludesQueryString(LookupValueError):
@@ -24,7 +26,7 @@ class InvalidPageURLValue(LookupValueError):
     pass
 
 
-class RoutablePathLookupOption(BaseLookupOption):
+class RoutableURLLookupOption(BaseLookupOption):
 
     def __init__(
         self,
@@ -117,3 +119,7 @@ class RoutablePathLookupOption(BaseLookupOption):
             if queryset.exists(id=result.id):
                 return result
         raise ObjectDoesNotExist
+
+
+class LegacyFileURLLookupOption(BaseLookupOption):
+    pass
