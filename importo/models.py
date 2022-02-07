@@ -2,6 +2,7 @@ from typing import Any, List
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class LegacyModelMixin(models.Model):
@@ -38,6 +39,31 @@ class LegacyImportedModelMixin(LegacyModelMixin):
         return super().extra_search_fields + [
             index.FilterField("last_imported_at"),
         ]
+
+
+class LegacyImportedModelWithFileMixin(LegacyImportedModelMixin):
+    legacy_file_domain = models.CharField(
+        verbose_name=_("legacy file domain"),
+        max_length=255,
+        blank=True,
+        null=True,
+        db_index=True,
+    )
+    legacy_file_path = models.CharField(
+        verbose_name=_("legacy file path"),
+        max_length=255,
+        blank=True,
+        null=True,
+        db_index=True
+    )
+
+    class Meta:
+        abstract = True
+
+    @property
+    def legacy_file_url(self):
+        if self.legacy_file_domain and self.legacy_file_path:
+            return "http://" + self.legacy_file_domain.rstrip("/") + self.legacy_file_path
 
 
 class LegacyReferenceModelMixin(models.Model):

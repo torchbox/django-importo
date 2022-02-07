@@ -1,29 +1,38 @@
-from typing import Any, List
-
 from django.db import models
 from django.http.request import HttpRequest
 from django.utils.functional import cached_property
+from django.utils.text import slugify
 from wagtail.core.models import Page
-from wagtail.search import index
+from wagtail.images.models import AbstractImage as WagtailAbstractImage
+from wagtail.documents.models import AbstractDocument as WagtailAbstractDocument
 
-from importo.models import LegacyImportedModelMixin
+from importo.models import LegacyImportedModelMixin, LegacyImportedModelWithFileMixin
+from importo.utils.urlpath import normalize_path
 
 
 class LegacyPageMixin(LegacyImportedModelMixin):
-    legacy_path = models.CharField(blank=True, null=True, max_length=255, db_index=True)
+    legacy_domain = models.CharField(
+        verbose_name=_("legacy domain"),
+        max_length=255,
+        blank=True,
+        null=True,
+        db_index=True,
+    )
+    legacy_path = models.CharField(
+        verbose_name=_("legacy path"),
+        blank=True,
+        null=True,
+        max_length=255,
+        db_index=True
+    )
 
     class Meta:
         abstract = True
 
-    def save(self, *args, **kwargs) -> None:
-        # Empty strings are not unique, but multiple NULLs are fine
-        if self.legacy_path is not None and self.legacy_path.strip() == "":
-            self.legacy_path = None
-        super().save(*args, **kwargs)
-
-    @classmethod
-    def extra_search_fields(cls) -> List[index.BaseField]:
-        return super().extra_search_fields() + [index.FilterField("legacy_path")]
+    @property
+    def legacy_url(self):
+        if self.legacy_domain and self.legacy_path:
+            return "http://" + self.legacy_domain.rstrip("/") + self.legacy_path
 
     @cached_property
     def specific_parent_page(self) -> Page:
@@ -38,13 +47,13 @@ class LegacyPageMixin(LegacyImportedModelMixin):
         segments = list(seg for seg in ideal_path.split("/") if seg)
         if segments:
             segments.pop()
-        return "/" + "/".join(segments)
+        return normalize_path("/".join(segments))
 
     def get_ideal_slug(self, request: HttpRequest = None) -> str:
         ideal_path = self.get_ideal_path(request)
         segments = list(seg for seg in ideal_path.split("/") if seg)
         if segments:
-            return segments.pop()
+            return slugify(segments.pop())
         return "home"
 
     def has_ideal_path(self, request: HttpRequest = None) -> bool:
@@ -59,11 +68,21 @@ class LegacyPageMixin(LegacyImportedModelMixin):
         (
             site_id,
             root_url,
-            current_parent_path,
+            current_parent_path
         ) = self.specific_parent_page.get_url_parts(request)
-        return current_parent_path.rstrip("/") == self.get_ideal_parent_path(request)
+        return normalize_path(current_parent_path) == self.get_ideal_parent_path(request)
 
     def has_ideal_slug(self, request: HttpRequest = None) -> bool:
         if not self.legacy_path:
             return True
         return self.slug == self.get_ideal_slug(request)
+
+
+class LegacyAbstractDocument(LegacyImportedModelWithFileMixin, AbstractDocument):
+    class Meta(AbstractDocument.Meta):
+        abstract = True
+
+
+class LegacyAbstractImage(LegacyImportedModelWithFileMixin, AbstractImage):
+    class Meta(AbstractImage.Meta):
+        abstract = True
