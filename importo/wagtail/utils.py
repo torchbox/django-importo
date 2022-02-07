@@ -1,17 +1,7 @@
-from typing import Union
-from urllib.parse import ParseResult, urlparse
-
 from django.conf import settings
 from django.http import HttpRequest
 from django.utils.text import slugify
 from wagtail.core.models import Page, Site
-
-INTERNAL_HOSTNAMES = set()
-for item in getattr(settings, "IMPORTO_LEGACY_SYSTEMS", ()):
-    for hostname in item["LINK_HOSTNAMES"]:
-        INTERNAL_HOSTNAMES.add(hostname)
-        if hostname.startswith("www."):
-            INTERNAL_HOSTNAMES.add(hostname[4:])
 
 
 def get_dummy_request(path: str = "/", site: Site = None) -> HttpRequest:
@@ -30,37 +20,6 @@ def get_dummy_request(path: str = "/", site: Site = None) -> HttpRequest:
         SERVER_NAME = settings.ALLOWED_HOSTS[0]
     request.META = {"SERVER_NAME": SERVER_NAME, "SERVER_PORT": SERVER_PORT}
     return request
-
-
-def normalize_path(path: str):
-    return "/" + path.strip("/ ")
-
-
-def is_internal_url(value: Union[str, ParseResult]) -> bool:
-    """
-    Should return True for:
-
-    Relative URLs with or without leading/trailing slashes, e.g.:
-    - /path/slug.html
-    - /path/slug/
-    - /path/slug
-    - path/slug.html
-    - page/slug/
-
-    Absolute URLs with a domain that matches content that is being
-    imported.
-    """
-    if isinstance(value, ParseResult):
-        parsed = value
-    else:
-        parsed = urlparse(value)
-    if not parsed.scheme and not parsed.hostname:
-        return True
-    return parsed.hostname not in INTERNAL_HOSTNAMES
-
-
-def is_external_url(value: Union[str, ParseResult]) -> None:
-    return not is_internal_url(value)
 
 
 def get_unique_slug(page: Page, parent_page: Page) -> str:
