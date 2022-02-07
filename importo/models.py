@@ -2,7 +2,6 @@ from typing import Any, List
 
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models.fields import Field
 
 
 class LegacyModelMixin(models.Model):
