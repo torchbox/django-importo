@@ -18,7 +18,7 @@ on:
 
 jobs:
   test-latest-supported:
-    name: With latest supported dependency versions
+    name: With latest supported Django and Wagtail
     env:
       DJANGO_SETTINGS_MODULE: importo.testapp.settings
     runs-on: ubuntu-latest
