@@ -15,7 +15,6 @@ on:
 # - python 3.9, django 3.2, wagtail 2.14 (+ linting and other checks)
 # - python 3.8, django 3.1, wagtail 2.13
 # - python 3.7, django 3.1, wagtail 2.12
-# - python 3.6, django 3.1, wagtail 2.12
 
 jobs:
   test-current:
@@ -54,9 +53,6 @@ jobs:
             wagtail: "Wagtail>=2.13,<2.14"
             django: Django>=3.1,<3.2
           - python: 3.7
-            wagtail: "Wagtail>=2.12,<2.13"
-            django: Django>=3.1,<3.2
-          - python: 3.6
             wagtail: "Wagtail>=2.12,<2.13"
             django: Django>=3.1,<3.2
     steps:
