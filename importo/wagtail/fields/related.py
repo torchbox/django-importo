@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Mapping, Optional, Sequence, Tuple, Union
 from django.core.exceptions import ValidationError
 from django.db.models.base import ModelBase
 from django.utils.translation import gettext_lazy as _
-from wagtail.core.models import Page
+from wagtail.models import Page
 from wagtail.documents import get_document_model
 from wagtail.images import get_image_model
 

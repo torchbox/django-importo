@@ -10,10 +10,9 @@ from django.db import transaction
 from django.db.models import Model
 from django.utils.functional import cached_property
 from wagtail.contrib.redirects.models import Redirect
+from wagtail.coreutils import get_dummy_request
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Collection, Page, Site
-from wagtail.coreutils import get_dummy_request
-
 
 from importo.commands import (
     BaseImportCommand,

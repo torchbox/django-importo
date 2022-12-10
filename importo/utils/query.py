@@ -6,8 +6,8 @@ from django.core.exceptions import FieldDoesNotExist
 from django.db.models import OneToOneRel, Q
 from django.db.models.functions import Coalesce
 from tate.legacy.models import LegacyPageMixin
-from wagtail.core.models import Page, get_page_models
-from wagtail.core.query import PageQuerySet
+from wagtail.models import Page, get_page_models
+from wagtail.query import PageQuerySet
 
 
 def get_legacy_page_type_related_names(

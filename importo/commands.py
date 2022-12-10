@@ -18,10 +18,11 @@ from django.forms.utils import ErrorDict, ErrorList
 from django.utils import timezone
 from django.utils.functional import cached_property
 
+from importo.readers.base import BaseReader
+from importo.readers.exceptions import BasePaginatedReaderException
+
 from . import constants, fields, finders, models, readers
 from .exceptions import CommandOptionError, SkipField, SkipRow
-from readers.base import BaseReader
-from .readers.exceptions import BasePaginatedReaderException
 from .utils.classes import LoggingShortcutsMixin
 from .utils.datetime import humanize_timedelta
 from .utils.values import extract_row_value

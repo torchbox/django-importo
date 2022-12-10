@@ -32,7 +32,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from importo.constants import NOT_SPECIFIED
-from importo.exceptions SkipField, SkipRow
+from importo.exceptions import SkipField, SkipRow
 
 from . import constants, error_codes, strategy_codes
 from .base import Field
@@ -171,7 +171,7 @@ class BaseMappedReferenceField(BaseRelationshipField):
     def get_queryset(self):
         queryset = self.model.objects.all()
         try:
-            from wagtail.core.models import Page
+            from wagtail.models import Page
 
             if issubclass(self.model, Page):
                 return queryset.defer_streamfields()

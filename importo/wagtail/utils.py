@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.http import HttpRequest
 from django.utils.text import slugify
-from wagtail.core.models import Page, Site
+from wagtail.models import Page, Site
 
 
 def get_dummy_request(path: str = "/", site: Site = None) -> HttpRequest:

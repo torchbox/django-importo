@@ -6,7 +6,7 @@ from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 
 from importo.constants import EMPTY_VALUES, NOT_SPECIFIED
-from importo.exceptions SkipField, SkipRow
+from importo.exceptions import SkipField, SkipRow
 from importo.parsers import BaseParser
 from importo.utils.classes import CommandBoundObject, CopyableMixin
 from importo.utils.values import ValueExtractionError, extract_row_value

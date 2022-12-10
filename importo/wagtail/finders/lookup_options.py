@@ -4,9 +4,9 @@ from typing import Iterable, Sequence
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.utils.functional import cached_property
-from wagtail.core.models import Page, Site
-from wagtail.core.query import PageQuerySet
-from wagtail.core.urls import serve_pattern
+from wagtail.models import Page, Site
+from wagtail.query import PageQuerySet
+from wagtail.urls import serve_pattern
 
 from importo.finders.lookup_options import (
     BaseLookupOption,
