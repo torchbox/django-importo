@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 
-class LookupValueNotSupported(ValueError):
+class LookupValueNotSupported(Exception):
     pass
 
 

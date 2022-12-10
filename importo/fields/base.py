@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from importo.commands import BaseImportCommand
 
 
-class EmptyValueError(ValueError):
+class EmptyValueError(Exception):
     """
     Raised when a field finds an empty value in the source data, when it expected a non-empty value.
     """

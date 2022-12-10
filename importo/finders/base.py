@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 
-class CachedValueNotFound(KeyError):
+class CachedValueNotFound(Exception):
     pass
 
 

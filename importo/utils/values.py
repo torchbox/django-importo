@@ -2,7 +2,7 @@ from collections import Mapping
 from typing import Any
 
 
-class ValueExtractionError(KeyError):
+class ValueExtractionError(Exception):
     """
     Raised when a field expects a raw value to be present in the source data, but it cannot be found
     using the specified value path.

@@ -20,7 +20,7 @@ __all__ = [
 ]
 
 
-class LookupValueError(ValueError):
+class LookupValueError(Exception):
     pass
 
 
