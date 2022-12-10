@@ -177,10 +177,3 @@ class BaseFinder(CommandBoundObject):
 
     def clear_cache(self) -> None:
         self.result_cache.clear()
-
-    @property
-    def other_finders(self):
-        return {
-            k: v for k, v in getattr(self.command, 'finders', {}).items()
-            if v is not self
-        }
