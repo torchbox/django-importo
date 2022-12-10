@@ -10,21 +10,33 @@ from django.db import transaction
 from django.db.models import Model
 from django.utils.functional import cached_property
 from wagtail.contrib.redirects.models import Redirect
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core.models import Collection, Page, Site
+from wagtail.fields import RichTextField, StreamField
+from wagtail.models import Collection, Page, Site
+from wagtail.coreutils import get_dummy_request
 
-from importo.commands.base import (
+
+from importo.commands import (
     BaseImportCommand,
     BaseQuerySetProcessingCommand,
     FindersMixin,
 )
-from importo.readers import BasePaginatedReaderException
+from importo.finders import UserFinder
+from importo.readers.exceptions import BasePaginatedReaderException
 from importo.wagtail.finders import DocumentFinder, ImageFinder, PageFinder
-from importo.wagtail.parsers.rich_text import RichTextParser
+from importo.wagtail.parsers.richtext import RichTextParser
 from importo.wagtail.utils import get_unique_slug
 
 
-class BasePageImportCommand(BaseImportCommand):
+class WagtailFindersMixin(FindersMixin):
+    finder_classes = {
+        "users": UserFinder,
+        "images": ImageFinder,
+        "documents": DocumentFinder,
+        "pages": PageFinder,
+    }
+
+
+class BasePageImportCommand(WagtailFindersMixin, BaseImportCommand):
     parent_page_type = None
     move_existing_pages = False
 
@@ -41,6 +53,16 @@ class BasePageImportCommand(BaseImportCommand):
                     "option to prevent creation of redirects"
                 ),
             )
+
+    def setup(self, options: Dict[str, Any]) -> None:
+        super().setup(options)
+        # Used by get_object_description() to generate page URLs more efficiently
+        self.dummy_request = get_dummy_request()
+
+    def get_object_description(self, obj):
+        if isinstance(obj, Page):
+            return f"<{type(obj).__name__} id='{obj.id}' url='{obj.get_url(self.dummy_request)}'>"
+        return super().get_object_description(obj)
 
     def process_options(self, options: Mapping[str, Any]) -> None:
         super().process_options(options)
@@ -248,7 +270,7 @@ class FixupError:
 
 
 class BaseInformationArchitectureFixupCommand(
-    FindersMixin, BaseWagtailQuerysetProcessingCommand
+    WagtailFindersMixin, BaseWagtailQuerysetProcessingCommand
 ):
     source_queryset = Page.objects.filter(depth__gt=1)
 
@@ -426,7 +448,9 @@ class BaseInformationArchitectureFixupCommand(
                     self.save_object(unblocked_page)
 
 
-class BaseContentFixupCommand(FindersMixin, BaseWagtailQuerysetProcessingCommand):
+class BaseContentFixupCommand(
+    WagtailFindersMixin, BaseWagtailQuerysetProcessingCommand
+):
     def add_arguments(self, parser: argparse.ArgumentParser):
         parser.add_argument(
             "--remove",
