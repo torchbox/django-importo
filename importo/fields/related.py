@@ -32,7 +32,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from importo.constants import NOT_SPECIFIED
-from importo.errors import SkipField, SkipRow
+from importo.exceptions SkipField, SkipRow
 
 from . import constants, error_codes, strategy_codes
 from .base import Field

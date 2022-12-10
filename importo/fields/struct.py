@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from importo.constants import NOT_SPECIFIED
-from importo.errors import SkipField, SkipRow
+from importo.exceptions SkipField, SkipRow
 
 from . import base, constants
 

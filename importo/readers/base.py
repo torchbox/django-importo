@@ -4,7 +4,7 @@ from typing import Any, Iterable, Mapping, Sequence
 from importo.constants import LOGGING_DIVIDER_LENGTH
 from importo.utils.logging import within_dividers
 
-from .errors import (
+from .exceptions import (
     BasePaginatedReaderException,
     EmptyPageRecieved,
     LastPageReached,
