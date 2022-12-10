@@ -1,11 +1,4 @@
-from typing import (
-    Any,
-    Mapping,
-    Optional,
-    Sequence,
-    Type,
-    Union,
-)
+from typing import Any, Mapping, Optional, Sequence, Type, Union
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
