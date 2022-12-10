@@ -11,14 +11,12 @@ if TYPE_CHECKING:
     from .lookup_options import BaseLookupOption
 
 
-
 class LookupValueNotSupported(Exception):
     pass
 
 
 class LookupValue:
-
-    def __init__(self, raw: Any = None, finder: 'BaseFinder' = None):
+    def __init__(self, raw: Any = None, finder: "BaseFinder" = None):
         self.raw = raw
         self.finder = None
         self.compatible_lookup_options = ()
@@ -45,7 +43,11 @@ class LookupValue:
         Checks this instance for compatibility with each of the finder's
         lookup options, and returns a tuple of the compatible ones.
         """
-        return tuple(option for option in self.finder.bound_lookup_options if option.is_enabled() and option.value_is_compatible(self))
+        return tuple(
+            option
+            for option in self.finder.bound_lookup_options
+            if option.is_enabled() and option.value_is_compatible(self)
+        )
 
     @cached_property
     def urlparsed(self) -> ParseResult:

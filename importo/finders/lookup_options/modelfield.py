@@ -1,7 +1,11 @@
 import re
 from typing import TYPE_CHECKING, Any, Callable, Sequence, Union
 
-from django.core.exceptions import FieldDoesNotExist, ImproperlyConfigured, ValidationError
+from django.core.exceptions import (
+    FieldDoesNotExist,
+    ImproperlyConfigured,
+    ValidationError,
+)
 from django.db.models import Field, Model, Q
 from django.db.models.query import QuerySet
 
@@ -13,7 +17,6 @@ from importo.utils.multi_table_inheritance import (
 )
 
 from .base import BaseLookupOption, LookupValueError
-
 
 if TYPE_CHECKING:
     from importo.finders.base import BaseFinder
@@ -53,7 +56,7 @@ class ModelFieldLookupOption(BaseLookupOption):
         field_name: str,
         *,
         case_sensitive: bool = True,
-        on_multiple_objects_found: Union[str,Callable] = NOT_SPECIFIED,
+        on_multiple_objects_found: Union[str, Callable] = NOT_SPECIFIED,
         valid_patterns: Sequence[re.Pattern] = None,
         invalid_patterns: Sequence[re.Pattern] = None,
     ):
@@ -185,7 +188,9 @@ class ModelFieldLookupOption(BaseLookupOption):
     # ORM lookup methods
     # -------------------------------------------------------------------------
 
-    def filter_queryset(self, queryset: QuerySet, lookup_value: LookupValue) -> QuerySet:
+    def filter_queryset(
+        self, queryset: QuerySet, lookup_value: LookupValue
+    ) -> QuerySet:
         return queryset.filter(self.get_q(lookup_value))
 
     def get_q(self, lookup_value: LookupValue) -> Q:
@@ -196,7 +201,7 @@ class ModelFieldLookupOption(BaseLookupOption):
         field_name = self.get_q_field_name(lookup_value)
         match_type = self.get_q_match_type(lookup_value)
         value = self.get_q_value(lookup_value)
-        kwargs = {f"{field_name}__{match_type}":  value}
+        kwargs = {f"{field_name}__{match_type}": value}
         return Q(**kwargs)
 
     def get_q_field_name(self, lookup_value: LookupValue) -> str:
@@ -228,9 +233,7 @@ class MTIModelFieldLookupOption(ModelFieldLookupOption):
     """
 
     def get_relevant_subclasses(self):
-        return get_concrete_subclasses_with_field(
-            self.model, self.field_name
-        )
+        return get_concrete_subclasses_with_field(self.model, self.field_name)
 
     def get_model_field(self) -> Field:
         try:

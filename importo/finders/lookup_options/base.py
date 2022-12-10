@@ -37,7 +37,6 @@ class ValueMatchesInvalidPatterns(LookupValueError):
 
 
 class BaseLookupOption(CopyableMixin):
-
     def __init__(
         self,
         *,
@@ -50,7 +49,7 @@ class BaseLookupOption(CopyableMixin):
         self.invalid_patterns = invalid_patterns or ()
         self._finder = None
 
-    def get_finder_bound_copy(self, finder: 'BaseFinder') -> 'BaseLookupOption':
+    def get_finder_bound_copy(self, finder: "BaseFinder") -> "BaseLookupOption":
         new = copy.copy(self)
         new.finder = finder
         return new
@@ -92,7 +91,9 @@ class BaseLookupOption(CopyableMixin):
             return bool(pattern.match(value.raw))
         return bool(pattern.match(value.raw, re.IGNORECASE))
 
-    def value_matches_any_patterns(self, value: LookupValue, *patterns: re.Pattern) -> bool:
+    def value_matches_any_patterns(
+        self, value: LookupValue, *patterns: re.Pattern
+    ) -> bool:
         for pattern in patterns:
             if self.value_matches_pattern(value, pattern):
                 return True
@@ -103,7 +104,9 @@ class BaseLookupOption(CopyableMixin):
         Raises ``ValueDoesNotMatchValidPatterns`` if ``value`` does NOT match one of
         the ``valid_patterns`` specified for this lookup.
         """
-        if self.valid_patterns and not self.value_matches_any_patterns(value, *self.valid_patterns):
+        if self.valid_patterns and not self.value_matches_any_patterns(
+            value, *self.valid_patterns
+        ):
             raise ValueDoesNotMatchValidPatterns
 
     def validate_with_invalid_paterns(self, value: LookupValue) -> None:
@@ -111,7 +114,9 @@ class BaseLookupOption(CopyableMixin):
         Raises ``ValueMatchesInvalidPatterns`` if ``value`` matches one of the
         ``invalid_patterns`` specified for this lookup.
         """
-        if self.invalid_patterns and self.value_matches_any_patterns(value, *self.invalid_patterns):
+        if self.invalid_patterns and self.value_matches_any_patterns(
+            value, *self.invalid_patterns
+        ):
             raise ValueMatchesInvalidPatterns
 
     def find(

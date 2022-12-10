@@ -3,8 +3,9 @@ import warnings
 from typing import TYPE_CHECKING, Union
 
 from django.utils.functional import cached_property
-from importo.utils.inspection import accepts_kwarg
+
 from importo.constants import LOGGING_LINE_LENGTH
+from importo.utils.inspection import accepts_kwarg
 
 if TYPE_CHECKING:
     from importo.commands import BaseCommand

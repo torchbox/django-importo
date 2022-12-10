@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 
-from importo.models import LegacyModelMixin
 from importo.finders.lookup_options import LegacyIDLookupOption
+from importo.models import LegacyModelMixin
 
 from .base import BaseFinder
 from .lookup_options import ModelFieldLookupOption
@@ -15,6 +15,7 @@ class UserFinder(BaseFinder):
     by their LEGACY_ID_FIELD value (if using `LegacyModelMixin`)
     or username.
     """
+
     model = User
     cache_lookup_failures = True
 

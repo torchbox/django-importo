@@ -8,7 +8,12 @@ from wagtail.core.models import Page, Site
 from wagtail.core.query import PageQuerySet
 from wagtail.core.urls import serve_pattern
 
-from importo.finders.lookup_options import BaseLookupOption, LookupValueError, ValueTypeIncompatible, ValueDomainInvalid
+from importo.finders.lookup_options import (
+    BaseLookupOption,
+    LookupValueError,
+    ValueDomainInvalid,
+    ValueTypeIncompatible,
+)
 from importo.finders.lookup_value import LookupValue
 from importo.utils.urlpath import is_external_url
 from importo.wagtail.utils import get_dummy_request
@@ -27,7 +32,6 @@ class InvalidPageURLValue(LookupValueError):
 
 
 class RoutableURLLookupOption(BaseLookupOption):
-
     def __init__(
         self,
         *,
@@ -41,7 +45,11 @@ class RoutableURLLookupOption(BaseLookupOption):
         self.patterns_match_path_only = patterns_match_path_only
         self.reject_urls_with_querystrings = reject_urls_with_querystrings
         self.reject_urls_with_fragments = reject_urls_with_fragments
-        super().__init__(case_sensitive=case_sensitive, valid_patterns=valid_patterns, invalid_patterns=invalid_patterns)
+        super().__init__(
+            case_sensitive=case_sensitive,
+            valid_patterns=valid_patterns,
+            invalid_patterns=invalid_patterns,
+        )
 
     def value_matches_pattern(self, value: LookupValue, pattern: re.Pattern) -> bool:
         """
@@ -76,7 +84,9 @@ class RoutableURLLookupOption(BaseLookupOption):
     def all_sites(self):
         return Site.objects.all().select_related("root_page")
 
-    def get_relevant_sites(self, hostname: str = None, port: int = None) -> Iterable[Site]:
+    def get_relevant_sites(
+        self, hostname: str = None, port: int = None
+    ) -> Iterable[Site]:
         if hostname is None:
             yield from self.all_sites
         else:
@@ -109,11 +119,11 @@ class RoutableURLLookupOption(BaseLookupOption):
         parse_result = value.urlparsed
         components = [pc for pc in parse_result.path.split("/") if pc]
 
-        for site in self.get_relevant_sites(
-            parse_result.hostname, parse_result.port
-        ):
+        for site in self.get_relevant_sites(parse_result.hostname, parse_result.port):
             try:
-                result = site.root_page.specific.route(self.dummy_request, components).page
+                result = site.root_page.specific.route(
+                    self.dummy_request, components
+                ).page
             except Http404:
                 continue
             if queryset.exists(id=result.id):

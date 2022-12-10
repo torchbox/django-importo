@@ -46,8 +46,12 @@ class LegacyIDLookupOption(MTIModelFieldLookupOption):
             and not self.no_matching_fields
         )
 
-    def get_relevant_subclasses(self) -> Mapping['ModelBase', str]:
-        return {model: related_name for model, related_name in get_concrete_subclasses(self.model).items() if issubclass(model, LegacyModelMixin)}
+    def get_relevant_subclasses(self) -> Mapping["ModelBase", str]:
+        return {
+            model: related_name
+            for model, related_name in get_concrete_subclasses(self.model).items()
+            if issubclass(model, LegacyModelMixin)
+        }
 
     def get_model_field(self) -> "Field":
         if issubclass(self.model, LegacyModelMixin):

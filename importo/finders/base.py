@@ -7,12 +7,12 @@ from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet
 
 from importo.utils.classes import CommandBoundObject
+
 from .lookup_options import BaseLookupOption
 from .lookup_value import LookupValue
 
 if TYPE_CHECKING:
     from importo.commands import BaseCommand
-
 
 
 class CachedValueNotFound(Exception):
@@ -102,7 +102,9 @@ class BaseFinder(CommandBoundObject):
             lookup_value = self.get_lookup_value(value)
 
         # A consistently worded error that can be raised below
-        not_found = self.model.DoesNotExist(f"No {self.model} was found matching '{lookup_value.raw}'.")
+        not_found = self.model.DoesNotExist(
+            f"No {self.model} was found matching '{lookup_value.raw}'."
+        )
 
         # First, try for a cached result
         try:
@@ -131,10 +133,14 @@ class BaseFinder(CommandBoundObject):
 
         Raises ``ObjectDoesNotExist`` if no match can be found.
         """
-        base_queryset =  self.get_queryset()
+        base_queryset = self.get_queryset()
         for option in lookup_value.valid_lookup_options:
             try:
-                option.get_match(lookup_value, base_queryset, on_multiple_matches=self.on_multiple_matches)
+                option.get_match(
+                    lookup_value,
+                    base_queryset,
+                    on_multiple_matches=self.on_multiple_matches,
+                )
             except ObjectDoesNotExist:
                 continue
         raise ObjectDoesNotExist
@@ -159,7 +165,9 @@ class BaseFinder(CommandBoundObject):
                 continue
         raise CachedValueNotFound(f"No cached results were found for '{lookup_value}'.")
 
-    def add_to_cache(self, lookup_value: LookupValue, result: Union[Model,NoneType]) -> None:
+    def add_to_cache(
+        self, lookup_value: LookupValue, result: Union[Model, None]
+    ) -> None:
         keys = lookup_value.cache_keys
         if result is not None:
             for option in self.lookup_options:

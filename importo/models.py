@@ -54,7 +54,7 @@ class LegacyImportedModelWithFileMixin(LegacyImportedModelMixin):
         max_length=255,
         blank=True,
         null=True,
-        db_index=True
+        db_index=True,
     )
 
     class Meta:
@@ -63,7 +63,9 @@ class LegacyImportedModelWithFileMixin(LegacyImportedModelMixin):
     @property
     def legacy_file_url(self):
         if self.legacy_file_domain and self.legacy_file_path:
-            return "http://" + self.legacy_file_domain.rstrip("/") + self.legacy_file_path
+            return (
+                "http://" + self.legacy_file_domain.rstrip("/") + self.legacy_file_path
+            )
 
 
 class LegacyReferenceModelMixin(models.Model):

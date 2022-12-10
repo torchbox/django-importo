@@ -2,8 +2,8 @@ import os
 import re
 from typing import Any, Iterable, Optional, Sequence, Union
 from urllib.parse import ParseResult, urlparse
-from django.core.exceptions import ObjectDoesNotExist
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 from django.http import Http404
 from django.utils.functional import cached_property
@@ -14,11 +14,13 @@ from importo.finders.lookup_options import LegacyIDLookupOption, LegacyURLLookup
 
 from .lookup_options import RoutableURLLookupOption
 
+
 class PageFinder(BaseFinder):
     """
     Helps importers to find Wagtail Page instance by legacy id, legacy path
     or page URL.
     """
+
     model = Page
 
     lookup_options = [

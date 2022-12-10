@@ -24,7 +24,6 @@ class FileExtensionInvalid(LookupValueError):
     pass
 
 
-
 class FilePathLookupOption(DomainSpecificValuesMixin, ModelFieldLookupOption):
     """
     A lookup option used to find imported objects from legacy filename values.
@@ -55,7 +54,11 @@ class FilePathLookupOption(DomainSpecificValuesMixin, ModelFieldLookupOption):
         Overriding to remove the case_sensitive option, as filename lookups
         are always case insensitive.
         """
-        super().__init__(case_sensitive=False, valid_patterns=valid_patterns, invalid_patterns=invalid_patterns)
+        super().__init__(
+            case_sensitive=False,
+            valid_patterns=valid_patterns,
+            invalid_patterns=invalid_patterns,
+        )
 
     def value_matches_pattern(self, value: LookupValue, pattern: re.Pattern) -> bool:
         """
@@ -86,7 +89,7 @@ class FilePathLookupOption(DomainSpecificValuesMixin, ModelFieldLookupOption):
 
         # Treat the value as it would have been if saved by Django
         try:
-            storage =  self.model_field.storage
+            storage = self.model_field.storage
         except AttributeError:
             storage = DefaultStorage()
         return storage.generate_filename(filename)
@@ -103,34 +106,43 @@ class FilePathLookupOption(DomainSpecificValuesMixin, ModelFieldLookupOption):
         # name (the default behaviour for Django file storages when a filename
         # is not unique at the time of upload)
         name, extension = os.path.splitext(filename)
-        queryset = queryset.filter(**{f"{self.field_name}__regex": (
-            r"" + re.escape(name) + r"(_[a-zA-Z0-9]{7})?\.([a-zA-Z0-9]{2,5})$"
-        )})
+        queryset = queryset.filter(
+            **{
+                f"{self.field_name}__regex": (
+                    r"" + re.escape(name) + r"(_[a-zA-Z0-9]{7})?\.([a-zA-Z0-9]{2,5})$"
+                )
+            }
+        )
 
-        best_match = queryset.annotate(match_quality=Case(
-            # full path matches are best, but it's uncommon for a field's
-            # `upload_to` value to be set to match the directory structure
-            # used on the legacy site
-            When(**{f"{self.field_name}__iexact": value.normalized_path}, then=0),
-
-            # filname and extension matches come next
-            When(**{f"{self.field_name}__iendswith": f"/{filename}"}, then=1),
-
-            # next come filename and extension matches where a 'unique' string
-            # has been added to the filename by Django
-            When(**{
-                f"{self.field_name}__icontains": f"/{name}_",
-                f"{self.field_name}__iendswith": f".{extension}",
-            }, then=2),
-
-            # and finally, filename matches with a different extension
-            When(**{
-                f"{self.field_name}__icontains": f"/{name}."
-            }, then=3),
-
-            default=4,
-            output_field=IntegerField(),
-        )).order_by("match_quality").first()
+        best_match = (
+            queryset.annotate(
+                match_quality=Case(
+                    # full path matches are best, but it's uncommon for a field's
+                    # `upload_to` value to be set to match the directory structure
+                    # used on the legacy site
+                    When(
+                        **{f"{self.field_name}__iexact": value.normalized_path}, then=0
+                    ),
+                    # filname and extension matches come next
+                    When(**{f"{self.field_name}__iendswith": f"/{filename}"}, then=1),
+                    # next come filename and extension matches where a 'unique' string
+                    # has been added to the filename by Django
+                    When(
+                        **{
+                            f"{self.field_name}__icontains": f"/{name}_",
+                            f"{self.field_name}__iendswith": f".{extension}",
+                        },
+                        then=2,
+                    ),
+                    # and finally, filename matches with a different extension
+                    When(**{f"{self.field_name}__icontains": f"/{name}."}, then=3),
+                    default=4,
+                    output_field=IntegerField(),
+                )
+            )
+            .order_by("match_quality")
+            .first()
+        )
 
         if best_match is None:
             raise self.model.DoesNotExist(not_found_msg)

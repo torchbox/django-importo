@@ -3,8 +3,8 @@ from django.http.request import HttpRequest
 from django.utils.functional import cached_property
 from django.utils.text import slugify
 from wagtail.core.models import Page
-from wagtail.images.models import AbstractImage as WagtailAbstractImage
 from wagtail.documents.models import AbstractDocument as WagtailAbstractDocument
+from wagtail.images.models import AbstractImage as WagtailAbstractImage
 
 from importo.models import LegacyImportedModelMixin, LegacyImportedModelWithFileMixin
 from importo.utils.urlpath import normalize_path
@@ -23,7 +23,7 @@ class LegacyPageMixin(LegacyImportedModelMixin):
         blank=True,
         null=True,
         max_length=255,
-        db_index=True
+        db_index=True,
     )
 
     class Meta:
@@ -68,9 +68,11 @@ class LegacyPageMixin(LegacyImportedModelMixin):
         (
             site_id,
             root_url,
-            current_parent_path
+            current_parent_path,
         ) = self.specific_parent_page.get_url_parts(request)
-        return normalize_path(current_parent_path) == self.get_ideal_parent_path(request)
+        return normalize_path(current_parent_path) == self.get_ideal_parent_path(
+            request
+        )
 
     def has_ideal_slug(self, request: HttpRequest = None) -> bool:
         if not self.legacy_path:

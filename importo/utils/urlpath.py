@@ -4,7 +4,6 @@ from urllib.parse import ParseResult, urlparse
 from django.conf import settings
 from django.http import HttpRequest
 
-
 INTERNAL_HOSTNAMES = set()
 for item in getattr(settings, "IMPORTO_LEGACY_SYSTEMS", ()):
     for hostname in item["LINK_HOSTNAMES"]:

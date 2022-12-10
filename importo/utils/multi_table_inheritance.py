@@ -1,8 +1,8 @@
 import functools
 from typing import Dict, Set, Type
 
-from django.db.models import OneToOneRel
 from django.apps import apps
+from django.db.models import OneToOneRel
 
 
 def get_concrete_subclass_related_names(
@@ -10,7 +10,8 @@ def get_concrete_subclass_related_names(
 ):
     if known_subclasses is None:
         known_subclasses = set(
-            model for model in apps.get_models()
+            model
+            for model in apps.get_models()
             if issubclass(model, model_class) and not model._meta.abstract
         )
 
@@ -35,7 +36,8 @@ def get_concrete_subclasses(model: Type) -> Dict[Type, str]:
 @functools.lru_cache(maxsize=None)
 def get_concrete_subclasses_with_field(model: Type, field_name: str) -> Dict[Type, str]:
     return {
-        subclass: related_name for subclass, related_name in get_concrete_subclass_related_names(model).items()
+        subclass: related_name
+        for subclass, related_name in get_concrete_subclass_related_names(model).items()
         if field_name in get_concrete_local_field_names(subclass)
     }
 
