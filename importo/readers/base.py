@@ -42,7 +42,8 @@ class BaseReader:
     def logger(self) -> logging.Logger:
         if self._logger is None:
             raise RuntimeError(
-                f"{self.__class__.__name__} instance does not have a logger set. Did you forget to call super().setup(options) in your command's setup() method?"
+                f"{self.__class__.__name__} instance does not have a logger set. "
+                "Did you forget to call super().setup(options) in your command's setup() method?"
             )
         return self._logger
 

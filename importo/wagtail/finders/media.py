@@ -1,12 +1,3 @@
-import os
-import re
-from typing import Any, Iterable, Optional, Sequence, Union
-from urllib.parse import ParseResult, urlparse
-
-from django.core.management.base import BaseCommand
-from django.db.models import Model, Q
-from django.http import Http404
-from django.utils.functional import cached_property
 from wagtail.documents import get_document_model
 from wagtail.images import get_image_model
 
@@ -16,9 +7,6 @@ from importo.finders.lookup_options.legacy_id import LegacyIDLookupOption
 from importo.models import LegacyImportedModelWithFileMixin, LegacyModelMixin
 
 from .lookup_options import LegacyFileURLLookupOption
-
-Image = get_image_model()
-Document = get_document_model()
 
 
 class BaseMediaFinder(BaseFinder):
@@ -48,7 +36,7 @@ class DocumentFinder(BaseMediaFinder):
     Helps importers to find Wagtail Document instances by path/url or legacy id.
     """
 
-    model = Document
+    model = get_document_model()
 
     valid_file_url_patterns = [
         r"\.(pdf|doc|docx|odt|odp|xls|xlsx|ods|csv|tsv|pps|ppt|pptx|zip|tar)$"
@@ -60,6 +48,6 @@ class ImageFinder(BaseFinder):
     Helps importers to find Wagtail Image instance by path/url or legacy id.
     """
 
-    model = Image
+    model = get_image_model()
 
     valid_file_url_patterns = [r"\.(png|gif|jpg|jpeg|webp)$"]

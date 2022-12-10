@@ -1,33 +1,16 @@
-import html
-import json
-import os
-import sys
-import uuid
-from datetime import date, datetime
-from io import BytesIO
 from typing import (
     Any,
-    Callable,
-    Dict,
-    List,
     Mapping,
     Optional,
     Sequence,
-    Tuple,
     Type,
     Union,
 )
-from urllib.parse import unquote_plus, urlparse
 
-import bleach
-import PIL
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.core.files.uploadedfile import SimpleUploadedFile, UploadedFile
+from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand
-from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model
-from django.utils import dateparse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
@@ -47,7 +30,7 @@ User = get_user_model()
 
 class BaseRelationshipField(Field):
     on_not_found_choices = [
-        strategy_codes.NOT_SPECIFIED,
+        NOT_SPECIFIED,
         strategy_codes.RAISE_ERROR,
         strategy_codes.SKIP_FIELD,
         strategy_codes.USE_FALLBACK,

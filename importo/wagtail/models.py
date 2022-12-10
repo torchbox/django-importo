@@ -3,9 +3,9 @@ from django.http.request import HttpRequest
 from django.utils.functional import cached_property
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
-from wagtail.models import Page
 from wagtail.documents.models import AbstractDocument
 from wagtail.images.models import AbstractImage
+from wagtail.models import Page
 
 from importo.models import LegacyImportedModelMixin, LegacyImportedModelWithFileMixin
 from importo.utils.urlpath import normalize_path

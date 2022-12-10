@@ -2,7 +2,6 @@ from collections import defaultdict
 from typing import TYPE_CHECKING, Any, Dict, Mapping, Optional, Sequence
 
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
 
 from importo.constants import NOT_SPECIFIED
 from importo.exceptions import SkipField, SkipRow

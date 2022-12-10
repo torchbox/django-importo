@@ -1006,7 +1006,7 @@ class BaseImportCommand(
         if self.dryrun:
             return
 
-        self.logger.info(f"Saving object")
+        self.logger.info("Saving object")
         try:
             self.save_object(obj, is_new)
             # Avoid re-processing if the source data includes duplicates...

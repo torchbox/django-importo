@@ -1,6 +1,6 @@
 import os
 import re
-from typing import Any, Sequence
+from typing import Sequence
 
 from django.core.files.storage import DefaultStorage
 from django.db.models import Case, IntegerField, Model, When

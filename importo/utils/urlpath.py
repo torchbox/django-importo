@@ -2,7 +2,6 @@ from typing import Union
 from urllib.parse import ParseResult, urlparse
 
 from django.conf import settings
-from django.http import HttpRequest
 
 INTERNAL_HOSTNAMES = set()
 for item in getattr(settings, "IMPORTO_LEGACY_SYSTEMS", ()):
@@ -20,7 +19,7 @@ for item in getattr(settings, "IMPORT_LEGACY_SYSTEMS", ()):
             MEDIA_HOSTNAMES.add(hostname[4:])
 
 
-def normalize_path(path: str):
+def normalize_path(path: str) -> str:
     return "/" + path.strip("/ ")
 
 

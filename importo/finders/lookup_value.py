@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Sequence, Set, Union
+from typing import TYPE_CHECKING, Any, Optional, Set, Tuple
 from urllib.parse import ParseResult, urlparse
 
 from django.core.validators import EMPTY_VALUES
@@ -16,10 +16,9 @@ class LookupValueNotSupported(Exception):
 
 
 class LookupValue:
-    def __init__(self, raw: Any = None, finder: "BaseFinder" = None):
+    def __init__(self, raw: Any = None, finder: Optional["BaseFinder"] = None):
         self.raw = raw
-        self.finder = None
-        self.compatible_lookup_options = ()
+        self.finder = finder
 
     def __repr__(self):
         return f"<{self.__class__.__name__} {self.raw}>"
@@ -34,11 +33,10 @@ class LookupValue:
         lookup options. Raises ``LookupValueNotSupported`` if the value
         is incompatible with all lookup options.
         """
-        self.compatible_lookup_options = self.get_compatible_lookup_options()
         if not self.compatible_lookup_options:
             raise LookupValueNotSupported
 
-    def get_compatible_lookup_options(self):
+    def get_compatible_lookup_options(self) -> Tuple(BaseLookupOption):
         """
         Checks this instance for compatibility with each of the finder's
         lookup options, and returns a tuple of the compatible ones.
@@ -48,6 +46,10 @@ class LookupValue:
             for option in self.finder.bound_lookup_options
             if option.is_enabled() and option.value_is_compatible(self)
         )
+
+    @cached_property
+    def compatible_lookup_options(self):
+        return self.get_compatible_lookup_options()
 
     @cached_property
     def urlparsed(self) -> ParseResult:
@@ -74,9 +76,8 @@ class LookupValue:
         to reuse cached values as much as possible as long as they are correct,
         regardless of the specific version that is used.
         """
-        keys = [self.raw]
+        keys = {self.raw}
         for lookup in self.valid_lookup_options:
             for key in lookup.get_extra_cache_keys(self):
-                if key not in keys:
-                    keys.append(key)
+                keys.add(key)
         return keys

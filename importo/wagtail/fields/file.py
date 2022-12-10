@@ -1,7 +1,6 @@
 from typing import Any, Dict
 
 from django.db.models import Model
-from django.utils.translation import gettext_lazy as _
 from wagtail.documents import get_document_model
 from wagtail.images import get_image_model
 

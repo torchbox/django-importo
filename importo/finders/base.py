@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Sequence, Union
+from typing import Any, Sequence, Union
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
@@ -10,9 +10,6 @@ from importo.utils.classes import CommandBoundObject
 
 from .lookup_options import BaseLookupOption
 from .lookup_value import LookupValue
-
-if TYPE_CHECKING:
-    from importo.commands import BaseCommand
 
 
 class CachedValueNotFound(Exception):

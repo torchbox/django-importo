@@ -1,6 +1,6 @@
 import io
 import json
-from typing import Any, Iterable
+from typing import Iterable
 
 from django.core.serializers.json import DjangoJSONEncoder
 

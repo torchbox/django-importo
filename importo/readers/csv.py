@@ -1,6 +1,5 @@
 import csv
 import io
-import logging
 from typing import Any, Iterable, Mapping
 
 from .base import BaseReader

@@ -3,12 +3,13 @@ from typing import Any, Sequence
 
 from importo.finders.lookup_options import LookupValueError, ValueTypeIncompatible
 from importo.finders.lookup_value import LookupValue
-from importo.utils.urlpath import is_external_url, is_internal_url
+from importo.utils.urlpath import is_external_url
 
 from .modelfield import MTIModelFieldLookupOption
 
 __all__ = [
-    "LegacyURLLookupOption" "ValueDomainInvalid",
+    "LegacyURLLookupOption",
+    "ValueDomainInvalid",
     "DomainSpecificLookupMixin",
 ]
 
@@ -17,7 +18,7 @@ class ValueDomainInvalid(LookupValueError):
     pass
 
 
-class DomainSpecificValuesMixin:
+class DomainSpecificLookupMixin:
     def get_extra_cache_keys(self, lookup_value: LookupValue) -> Sequence[Any]:
         keys = super().get_extra_cache_keys(lookup_value)
         keys.append(
@@ -30,7 +31,7 @@ class DomainSpecificValuesMixin:
         return keys
 
 
-class LegacyURLLookupOption(DomainSpecificValuesMixin, MTIModelFieldLookupOption):
+class LegacyURLLookupOption(DomainSpecificLookupMixin, MTIModelFieldLookupOption):
     def __init__(
         self,
         *,
