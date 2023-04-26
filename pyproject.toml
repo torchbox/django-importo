@@ -1,6 +1,45 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "django-importo"
+authors = [
+    {name = "Andy Babic", email = "andy.babic@torchbox.com"}
+]
+keywords = "django migrate legacy data import wagtail pages models utility"
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Framework :: Django",
+    "Framework :: Django :: 2.2",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.0",
+    "Framework :: Wagtail",
+    "Framework :: Wagtail :: 2",
+    "Framework :: Wagtail :: 3",
+    "Framework :: Wagtail :: 4",
+]
+dynamic = ["version"]
+requires-python = ">=3.7"
+dependencies = [
+    "Django>=3.0,<4.1",
+    "Wagtail>=2.14,<4.0",
+]
+
 [tool.black]
 line_length = 88
-target-version = ['py38']
+target-version = ["py38"]
 exclude = '''
 (
   /(
@@ -15,11 +54,6 @@ exclude = '''
     | dist
     | docs
     | venv
-    | node_modules
-    | frontend      # Exclude imported Tate repositories.
-    | ui            # Exclude imported Tate repositories.
-    | api           # Exclude imported Tate repositories.
-    | api_client    # Exclude imported Tate repositories.
   )/
 )
 '''
