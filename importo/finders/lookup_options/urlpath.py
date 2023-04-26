@@ -3,7 +3,7 @@ from typing import Any, Sequence
 
 from importo.finders.lookup_options import LookupValueError, ValueTypeIncompatible
 from importo.finders.lookup_value import LookupValue
-from importo.utils.urlpath import is_external_url
+from importo.utils.uri import is_external_uri
 
 from .modelfield import MTIModelFieldLookupOption
 
@@ -67,7 +67,7 @@ class LegacyURLLookupOption(DomainSpecificLookupMixin, MTIModelFieldLookupOption
         if value.raw.is_digit():
             raise LookupValueError
         # Avoid lookups for domains we are not interested in
-        if is_external_url(value.urlparsed):
+        if is_external_uri(value.urlparsed):
             raise ValueDomainInvalid
         super().validate_lookup_value(value)
 

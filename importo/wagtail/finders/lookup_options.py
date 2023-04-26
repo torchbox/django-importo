@@ -15,7 +15,7 @@ from importo.finders.lookup_options import (
     ValueTypeIncompatible,
 )
 from importo.finders.lookup_value import LookupValue
-from importo.utils.urlpath import is_external_url
+from importo.utils.uri import is_external_uri
 from importo.wagtail.utils import get_dummy_request
 
 
@@ -66,7 +66,7 @@ class RoutableURLLookupOption(BaseLookupOption):
         if value.raw.is_digit():
             raise LookupValueError
         # Avoid lookups for domains we are not interested in
-        if is_external_url(value.urlparsed):
+        if is_external_uri(value.urlparsed):
             raise ValueDomainInvalid
         if self.reject_urls_with_querystrings and value.urlparsed.query:
             raise ValueIncludesQueryString

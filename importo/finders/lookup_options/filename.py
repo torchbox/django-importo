@@ -8,7 +8,7 @@ from django.db.models.query import QuerySet
 
 from importo.finders.lookup_value import LookupValue
 from importo.utils.io import filename_from_url
-from importo.utils.urlpath import is_media_url
+from importo.utils.uri import is_media_uri
 
 from .base import LookupValueError, ValueTypeIncompatible
 from .modelfield import ModelFieldLookupOption
@@ -74,7 +74,7 @@ class FilePathLookupOption(DomainSpecificValuesMixin, ModelFieldLookupOption):
             raise ValueTypeIncompatible
         if value.raw.is_digit():
             raise LookupValueError
-        if not is_media_url(value.urlparsed):
+        if not is_media_uri(value.urlparsed):
             raise ValueDomainInvalid
         # Avoid lookups for filenames without a 2-5 char extension, which should
         # be the case documents, images, audio and video

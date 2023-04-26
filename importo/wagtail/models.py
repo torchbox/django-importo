@@ -8,7 +8,7 @@ from wagtail.images.models import AbstractImage
 from wagtail.models import Page
 
 from importo.models import LegacyImportedModelMixin, LegacyImportedModelWithFileMixin
-from importo.utils.urlpath import normalize_path
+from importo.utils.uri import normalize_path
 
 
 class LegacyPageMixin(LegacyImportedModelMixin):

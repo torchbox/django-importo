@@ -4,7 +4,7 @@ from urllib.parse import ParseResult, urlparse
 from django.core.validators import EMPTY_VALUES
 from django.utils.functional import cached_property
 
-from importo.utils.urlpath import normalize_path
+from importo.utils.uri import normalize_path
 
 if TYPE_CHECKING:
     from .base import BaseFinder
