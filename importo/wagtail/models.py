@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
@@ -15,9 +15,7 @@ class ImportedWagtailPage(BaseImportedURIEntity):
     )
     ia_fixup_required = models.BooleanField(default=False)
 
-    object = models.OneToOneField(
-        "wagtailcore.Page", related_name="import_record"
-    )
+    object = models.OneToOneField("wagtailcore.Page", related_name="import_record")
 
     @cached_property
     def original_parent_path(self):

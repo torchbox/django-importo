@@ -68,8 +68,12 @@ class BaseImportedURIEntity(BaseImportedEntity):
     )
 
     # The host and path are stored separately for improved lookup performance
-    original_host = models.CharField(verbose_name=_("original host"), max_length=255, db_index=True)
-    original_path = models.CharField(verbose_name=_("original path"), max_length=255, db_index=True)
+    original_host = models.CharField(
+        verbose_name=_("original host"), max_length=255, db_index=True
+    )
+    original_path = models.CharField(
+        verbose_name=_("original path"), max_length=255, db_index=True
+    )
 
     # Full URIs are too long to reliably apply unique restraints to, so
     # we create a hash in full_clean() and apply the constraint to that
@@ -129,4 +133,7 @@ class ImportedUser(BaseImportedEntity):
 
     Lookups on
     """
-    object = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="import_record")
+
+    object = models.OneToOneField(
+        settings.AUTH_USER_MODEL, related_name="import_record"
+    )
