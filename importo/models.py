@@ -135,5 +135,5 @@ class ImportedUser(BaseImportedEntity):
     """
 
     object = models.OneToOneField(
-        settings.AUTH_USER_MODEL, related_name="import_record"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="import_record"
     )

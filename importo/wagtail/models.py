@@ -15,7 +15,9 @@ class ImportedWagtailPage(BaseImportedURIEntity):
     )
     ia_fixup_required = models.BooleanField(default=False)
 
-    object = models.OneToOneField("wagtailcore.Page", related_name="import_record")
+    object = models.OneToOneField(
+        "wagtailcore.Page", related_name="import_record", on_delete=models.CASCADE
+    )
 
     @cached_property
     def original_parent_path(self):
@@ -31,6 +33,7 @@ class ImportedWagtailDocument(BaseImportedURIEntity):
     )
     object = models.OneToOneField(
         getattr(settings, "WAGTAILDOCS_DOCUMENT_MODEL", "wagtaildocs.Document"),
+        on_delete=models.CASCADE,
         related_name="import_record",
     )
 
@@ -38,5 +41,6 @@ class ImportedWagtailDocument(BaseImportedURIEntity):
 class ImportedWagtailImage(BaseImportedURIEntity):
     object = models.OneToOneField(
         getattr(settings, "WAGTAILIMAGES_IMAGE_MODEL", "wagtailimages.Image"),
+        on_delete=models.CASCADE,
         related_name="import_record",
     )
