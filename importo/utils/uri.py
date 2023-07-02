@@ -4,17 +4,25 @@ from urllib.parse import ParseResult, SplitResult, urlsplit
 
 from django.conf import settings
 
-HOST_PATH_REGEX = r"(https?:\/\/[^\/]+)([^?#]+)?"
+HOST_PATH_REGEX = re.compile(r"(https?:\/\/[^\/]+)([^?#]+)?")
+SLUG_REGEX = re.compile(r"([\w\-]+)\.?[\w]*\/?$", re.UNICODE)
 
 
-def extract_host_and_path(uri: str) -> Tuple(str, str):
-    match = re.match(HOST_PATH_REGEX, uri)
+def extract_host_and_path(uri: str) -> Tuple[str, str]:
+    match = HOST_PATH_REGEX.match(uri)
     if match:
         try:
             return match.group[1], match.group[2]
         except IndexError:
             return match.group[1], "/"
-    raise ValueError("'{uri}' is not a valid URI.")
+    raise ValueError(f"'{uri}' is not a valid URI.")
+
+
+def extract_slug(path_or_uri: str) -> str:
+    match = SLUG_REGEX.match(path_or_uri)
+    if match:
+        return match.group[0]
+    raise ValueError(f"Slug could not be extracted from '{path_or_uri}'.")
 
 
 INTERNAL_CONTENT_HOSTS = set(getattr(settings, "IMPORTO_INTERNAL_CONTENT_HOSTS", ()))
