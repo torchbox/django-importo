@@ -1,4 +1,4 @@
-name: "Test Python"
+name: "Test"
 
 on:
   push:
@@ -12,8 +12,8 @@ on:
 # - a test run against Wagtail's git main branch (allowing failures)
 
 jobs:
-  test-latest-supported:
-    name: Latest Django + Wagtail
+  test-latest:
+    name: Latest
     env:
       DJANGO_SETTINGS_MODULE: importo.testapp.settings
     runs-on: ubuntu-latest
@@ -38,15 +38,14 @@ jobs:
         run: pytest --junitxml=junit/test-results.xml --cov=importo
 
   test-legacy:
-    name: Legacy Django + Wagtail
-    needs: test-latest-supported
+    name: Legacy
+    needs: test-latest
     runs-on: ubuntu-latest
     env:
       DJANGO_SETTINGS_MODULE: importo.testapp.settings
     strategy:
       matrix:
         include:
-
           - python: '3.10'
             wagtail: "Wagtail>=4,<5"
             django: Django>=4.1,<4.2
@@ -72,8 +71,8 @@ jobs:
       - name: 🧪 Run tests
         run: pytest
 
-  test-bleading-edges:
-    name: Bleading-edge Django + Wagtail
+  test-bleeding-edges:
+    name: Bleeding-edges
     needs: test-legacy
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -83,8 +82,8 @@ jobs:
       matrix:
         include:
           - django: "git+https://github.com/django/django.git@main#egg=Django"
-            wagtail: Wagtail>4.1,<4.2
-          - django: Django>=4.1,<4.2
+            wagtail: Wagtail>5,<6
+          - django: Django>=4.2,<4.3
             wagtail: "git+https://github.com/wagtail/wagtail.git@main#egg=Wagtail"
     steps:
       - name: Checkout repository
