@@ -71,7 +71,6 @@ class ImageReferenceField(BaseFinderField):
     def handle_not_found(self, value):
         strategy = self.on_not_found
         if strategy == strategy_codes.ATTEMPT_DOWNLOAD:
-
             file_path = value
             for f, r in self.file_path_replace:
                 file_path = file_path.replace(f, r)

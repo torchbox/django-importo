@@ -51,7 +51,6 @@ def get_concrete_local_field_names(model: Type) -> Set[str]:
 def get_legacy_page_field_values(
     field_name: str, queryset: PageQuerySet = None, exclude_nulls=False
 ) -> Tuple[Any]:
-
     if queryset is None:
         queryset = Page.objects.all()
 
@@ -85,7 +84,6 @@ def get_legacy_page_matches(
         queryset = Page.objects.all()
 
     for name in field_names:
-
         if name == "legacy_id" and getattr(queryset.model, "LEGACY_ID_FIELD", None):
             q |= Q(**{f"{queryset.model.LEGACY_ID_FIELD}__{lookup_type}": value})
         else:

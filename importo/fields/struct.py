@@ -13,7 +13,6 @@ if TYPE_CHECKING:
 
 
 class ListField(base.Field):
-
     clean_cost = constants.CLEAN_COST_MEDIUM
     default_fallback = []
 

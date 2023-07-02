@@ -360,7 +360,6 @@ class NoopField(Field):
 
 
 class ListField(Field):
-
     clean_cost = constants.CLEAN_COST_MEDIUM
     default_fallback = []
 

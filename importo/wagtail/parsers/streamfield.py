@@ -632,7 +632,6 @@ class StreamFieldContentParser(BaseRichTextContainingParser):
         blocks = []
         for block in value:
             if block["type"] == "page_section":
-
                 if heading := block.pop("heading", "").strip():
                     blocks.append({"type": "heading", "value": {"text": heading}})
 
@@ -844,7 +843,6 @@ class StreamFieldContentParser(BaseRichTextContainingParser):
                     richtext_segments.append("<br>")
 
             elif buttons := elem.find_all("a", class_="btn"):
-
                 if cta_row_blocks_supported:
                     # Close the current series of inline elements
                     self._add_paragraph_from_inline_elements(
@@ -931,7 +929,6 @@ class StreamFieldContentParser(BaseRichTextContainingParser):
 
                 # Add table HTML as `TableBlock` value
                 elif elem.name == "table" or elem.find("table"):
-
                     if len(elem.find_all("td")) == 1:
                         # Extract content from single-column tables
                         content = self.parse_richtext(str(elem))
@@ -954,7 +951,6 @@ class StreamFieldContentParser(BaseRichTextContainingParser):
 
                 # Add iframe HTML a EmbedHTMLBlock values
                 elif elem.name == "iframe" or elem.find(["iframe"]):
-
                     if embed_html_blocks_supported:
                         blocks.append(
                             {
