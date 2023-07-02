@@ -570,7 +570,6 @@ class BaseContentFixupCommand(
         return_value = []
 
         for block in blocks:
-
             if block.get("value") and isinstance(block["value"], list):
                 # If this is a value for a StreamBlock or ListBlock,
                 # ensure any sub-block values are processed

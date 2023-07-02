@@ -7,7 +7,20 @@ name = "django-importo"
 authors = [
     {name = "Andy Babic", email = "andy.babic@torchbox.com"}
 ]
-keywords = "django migrate legacy data import wagtail pages models utility"
+description = "A developer-friendly framework for importing legacy data into Django and Wagtail projects."
+keywords = [
+  "django",
+  "wagtail",
+  "import",
+  "migrate",
+  "migration",
+  "transfer",
+  "legacy",
+  "data",
+  "pages",
+  "models",
+  "utility",
+]
 readme = "README.md"
 license = {file = "LICENSE"}
 classifiers = [
@@ -33,8 +46,19 @@ classifiers = [
 dynamic = ["version"]
 requires-python = ">=3.7"
 dependencies = [
-    "Django>=3.0,<4.1",
-    "Wagtail>=2.14,<4.0",
+    "Django>=3.0,<4.3",
+]
+
+[tool.flit.module]
+name = "importo"
+
+[project.optional-dependencies]
+wagtail = [
+    "Wagtail>3.0",
+]
+test = [
+    "pytest >=7.3",
+    "pytest-cov",
 ]
 
 [tool.black]

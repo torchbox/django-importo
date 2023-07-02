@@ -10,7 +10,6 @@ from importo.utils.multi_table_inheritance import get_concrete_subclasses
 from .modelfield import MTIModelFieldLookupOption, MultipleFieldTypesError
 
 if TYPE_CHECKING:
-
     from importo.finders.base import BaseFinder
 
 __all__ = [
