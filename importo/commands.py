@@ -421,7 +421,6 @@ class ReadingCommand(LoggingCommand):
     def handle(self, *args, **options) -> None:
         self.max_page_size = getattr(self.reader, "page_size", None)
         for row in self.reader:
-
             # These values are unlikley to change between rows, but readers
             # might not know them until results have been requested
             self.total_rows = getattr(self.reader, "total_rows", None)

@@ -149,7 +149,6 @@ class BasePaginatedReader(BaseReader):
         while True:
             page_number = self.get_next_page_number()
             for result in self.get_results(page_number):
-
                 # Handle 'yielded exceptions' from get_rows()
                 if isinstance(result, BasePaginatedReaderException):
                     self.logger.info("-" * LOGGING_DIVIDER_LENGTH)

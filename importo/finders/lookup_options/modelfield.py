@@ -35,7 +35,6 @@ class ModelFieldValidationFailed(LookupValueError):
 
 
 class ModelFieldLookupOption(BaseLookupOption):
-
     # NOTE: constants are defined here to make them
     # available without additional imports
     RAISE_ERROR = "RAISE_ERROR"
@@ -157,7 +156,6 @@ class ModelFieldLookupOption(BaseLookupOption):
         value: LookupValue,
         base_queryset: QuerySet,
     ) -> Model:
-
         queryset = self.filter_queryset(base_queryset, value)
 
         # NOTE: Even if we don't know there will be multiple matches, we can
